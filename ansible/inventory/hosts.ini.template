@@ -1,0 +1,2 @@
+[homelab]
+${HOMELAB_VM_NAME} ansible_host=${HOMELAB_VM_IP} ansible_user=${VM_ANSIBLE_USER}
