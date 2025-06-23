@@ -11,6 +11,6 @@ else
 fi
 
 # Generate the actual hosts file from the template
-envsubst < ansible/inventory/hosts.ini.template > ansible/inventory/hosts
+envsubst < ansible/inventory/hosts.template > ansible/inventory/hosts
 
-echo "Generated ansible/inventory/hosts from template"
+echo "✅ Generated ansible/inventory/hosts from template"

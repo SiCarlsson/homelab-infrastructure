@@ -1,0 +1,13 @@
+[homelab]
+${HOMELAB_VM1_NAME} ansible_host=${HOMELAB_VM1_IP} ansible_user=${HOMELAB_VM1_USER}
+${HOMELAB_VM2_NAME} ansible_host=${HOMELAB_VM2_IP} ansible_user=${HOMELAB_VM2_USER}
+
+[webservers]
+${WEBSERVER_VM1_NAME} ansible_host=${WEBSERVER_VM1_IP} ansible_user=${WEBSERVER_VM1_USER}
+${WEBSERVER_VM2_NAME} ansible_host=${WEBSERVER_VM2_IP} ansible_user=${WEBSERVER_VM2_USER}
+
+[databases]
+${DATABASE_VM1_NAME} ansible_host=${DATABASE_VM1_IP} ansible_user=${DATABASE_VM1_USER}
+
+[monitoring]
+${MONITORING_VM1_NAME} ansible_host=${MONITORING_VM1_IP} ansible_user=${MONITORING_VM1_USER}
