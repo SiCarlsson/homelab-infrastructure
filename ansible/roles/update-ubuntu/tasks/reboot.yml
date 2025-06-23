@@ -1,0 +1,13 @@
+---
+- name: Check if reboot is required
+  stat:
+    path: /var/run/reboot-required
+  register: reboot_required
+  tags: ["update", "reboot"]
+
+- name: Reboot system if required
+  reboot:
+    msg: "Rebooting to complete system updates"
+    reboot_timeout: 300
+  when: reboot_required.stat.exists
+  tags: ["update", "reboot"]

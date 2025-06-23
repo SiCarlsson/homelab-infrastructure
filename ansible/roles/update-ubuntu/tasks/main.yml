@@ -1,0 +1,6 @@
+---
+- name: Handle package updates
+  include_tasks: packages.yml
+
+- name: Handle system reboot if needed
+  include_tasks: reboot.yml

@@ -1,0 +1,20 @@
+---
+- name: Update apt package cache
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+  tags: ["update", "cache"]
+
+- name: Upgrade all packages safely
+  apt:
+    upgrade: safe
+    autoremove: yes
+    autoclean: yes
+  register: upgrade_result
+  tags: ["update", "upgrade"]
+
+- name: Display upgrade results
+  debug:
+    msg: "{{ upgrade_result.stdout_lines }}"
+  when: upgrade_result.stdout_lines is defined
+  tags: ["update", "info"]
