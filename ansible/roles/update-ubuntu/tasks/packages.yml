@@ -11,6 +11,7 @@
     autoremove: yes
     autoclean: yes
   register: upgrade_result
+  notify: reboot if required
   tags: ["update", "upgrade"]
 
 - name: Display upgrade results
@@ -18,3 +19,9 @@
     msg: "{{ upgrade_result.stdout_lines }}"
   when: upgrade_result.stdout_lines is defined
   tags: ["update", "info"]
+
+- name: Check if reboot is required
+  stat:
+    path: /var/run/reboot-required
+  register: reboot_required_file
+  tags: ["update", "reboot"]
