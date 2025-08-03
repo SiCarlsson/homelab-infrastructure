@@ -2,11 +2,11 @@
 
 This repository contains the **Infrastructure as Code (IaC)** setup for my personal homelab. 
 
+> ⚠️ Work in progress — I'm learning Terraform and Ansible, and gradually automating more of my setup.
+
 It uses:
 - **Ansible** for configuring and deploying services inside the VMs
 - **Terraform** for provisioning virtual machines and networks on Proxmox
-
-> ⚠️ Work in progress — I'm learning Terraform and Ansible, and gradually automating more of my setup.
 
 ## Setup
 
