@@ -1,0 +1,15 @@
+Cloudflare DDNS
+  docker-image: oznu/cloudflare-ddns:latest
+
+Homepage
+
+AdGuard
+
+Nginx Proxy Manager
+
+Logseq
+
+Vaultwarden?
+
+Wireguard?
+
