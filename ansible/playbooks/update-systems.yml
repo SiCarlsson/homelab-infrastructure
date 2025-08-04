@@ -1,8 +1,0 @@
----
-- name: Update Ubuntu systems
-  hosts: homelab
-  become: yes
-  gather_facts: yes
-
-  roles:
-    - update-ubuntu

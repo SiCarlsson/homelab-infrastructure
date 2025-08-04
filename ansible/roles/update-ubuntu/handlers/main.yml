@@ -1,8 +1,0 @@
----
-- name: reboot if required
-  reboot:
-    msg: "Rebooting to complete system updates"
-    reboot_timeout: 300
-    pre_reboot_delay: 5
-  when: reboot_required_file.stat.exists
-  tags: ["update", "reboot"]

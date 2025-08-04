@@ -1,8 +1,0 @@
----
-- name: Install/update Docker and Docker Compose
-  hosts: homelab
-  become: yes
-  gather_facts: yes
-
-  roles:
-    - docker

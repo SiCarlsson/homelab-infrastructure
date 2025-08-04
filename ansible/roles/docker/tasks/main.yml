@@ -1,9 +1,0 @@
----
-- name: Setup Docker repository requirements
-  include_tasks: requirements.yml
-
-- name: Install Docker packages
-  include_tasks: packages.yml
-
-- name: Start and enable Docker service
-  include_tasks: service.yml
