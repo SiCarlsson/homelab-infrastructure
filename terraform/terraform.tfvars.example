@@ -1,0 +1,2 @@
+# Terraform variables are loaded from .env file via TF_VAR_ environment variables
+# Copy this file to terraform.tfvars and customize the values to have environment-specific overrides if needed
