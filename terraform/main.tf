@@ -1,18 +1,39 @@
 # This file creates the Proxmox Infrastructure using Terraform
 # It requires the Proxmox provider and the necessary credentials to be set up
 
-resource "proxmox_vm_qemu" "vm1" {
-  name   = "vm1"
-  description = "Ubuntu Server"
-  vmid = "301"
-  target_node = "M900"
+resource "proxmox_virtual_environment_vm" "network_vm" {
+  name      = var.NETWORK_VM_NAME
+  vm_id     = 300
+  node_name = "pve-1"
 
+  clone {
+    vm_id = 900
+  }
 
-  clone = "ubuntu-22.04-template"
   cpu {
     cores = 2
-    sockets = 1
-    type = "host"
   }
-  memory = 2048
+
+  memory {
+    dedicated = 2048
+  }
+
+  initialization {
+    datastore_id = "nvme"
+    ip_config {
+      ipv4 {
+        address = var.NETWORK_VM_IP_ADDRESS
+        gateway = "192.168.10.1"
+      }
+    }
+
+    dns {
+      servers = ["192.168.10.1", "8.8.8.8"]
+    }
+
+    user_account {
+      username = "serveradmin"
+      keys     = [var.PROXMOX_VM_SSH_PUBLIC_KEY]
+    }
+  }
 }

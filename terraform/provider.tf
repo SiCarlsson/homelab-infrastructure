@@ -3,33 +3,31 @@
 terraform {
   required_providers {
     proxmox = {
-      source  = "Telmate/proxmox"
-      version = "3.0.2-rc03"
+      source  = "bpg/proxmox"
+      version = "~> 0.60"
     }
   }
 }
 
-variable "proxmox_api_url" {
+variable "PROXMOX_API_URL" {
   type        = string
   description = "Proxmox API URL"
 }
 
-variable "proxmox_api_token_id" {
+variable "PROXMOX_API_TOKEN_ID" {
   type        = string
   description = "Proxmox API token id"
   sensitive   = true
 }
 
-variable "proxmox_api_token_secret" {
+variable "PROXMOX_API_TOKEN_SECRET" {
   type        = string
   description = "Proxmox API token secret"
   sensitive   = true
 }
 
 provider "proxmox" {
-  pm_api_url          = var.proxmox_api_url
-  pm_api_token_id     = var.proxmox_api_token_id
-  pm_api_token_secret = var.proxmox_api_token_secret
-
-  pm_tls_insecure = true
+  endpoint = var.PROXMOX_API_URL
+  api_token = "${var.PROXMOX_API_TOKEN_ID}=${var.PROXMOX_API_TOKEN_SECRET}"
+  insecure = true
 }
