@@ -32,7 +32,7 @@ resource "proxmox_virtual_environment_vm" "network_vm" {
     }
 
     user_account {
-      username = "serveradmin"
+      username = "ubuntu"
       keys     = [var.PROXMOX_VM_SSH_PUBLIC_KEY]
     }
   }
