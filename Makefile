@@ -1,5 +1,5 @@
 # Makefile for Terraform operations with environment variables
-.PHONY: plan apply destroy init validate create-cloudinit
+.PHONY: plan apply destroy init validate create-cloudinit create-ssh-to-pve
 
 # Load environment variables from .env file
 ifneq (,$(wildcard ./.env))
@@ -10,6 +10,10 @@ endif
 ###
 # Proxmox commands
 ###
+# Establish SSH connection to Proxmox host
+create-ssh-to-pve:
+	./scripts/create-ssh-to-pve.sh
+
 # Create cloud-init template
 create-cloudinit:
 	./scripts/create-cloud-init-template.sh
