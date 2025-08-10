@@ -1,29 +1,34 @@
 # 🏠 Homelab Infrastructure
 
-**⚠️ Work in progress**
+**⚠️ Work in progress ⚠️**
 
-This repository contains the **Infrastructure as Code (IaC)** setup for my personal homelab. 
+This repository contains the **Infrastructure as Code (IaC)** setup for my personal homelab.
 
 It uses:
+
 - **Ansible** for configuring and deploying services inside the VMs
 - **Terraform** for provisioning virtual machines and networks on Proxmox
+- **Proxmox VE** for virtualization and container management
 
 ## Setup
 
 ### Prerequisites
 
-Before running any commands, ensure you have the following tools installed:
+Before running any commands, ensure you have the following tools installed on your local machine:
+
 - **Terraform**
 - **Ansible**
 
 ### Required Configuration Files
 
-**⚠️ All variable files must be properly configured before running any commands:**
+**⚠️ All variable files must be properly configured before running any commands**
 
 1. **Environment Variables** - Copy and configure the main environment file:
+
    ```bash
    cp .env.example .env
    ```
+
    Edit `.env` with your specific values.
 
 2. **Terraform Credentials** - Copy and configure Terraform credentials:
@@ -43,7 +48,7 @@ Before running any commands, ensure you have the following tools installed:
    ```bash
    make create-ssh-to-pve
    ```
-4. **Create cloud-init template**:
+4. **Create cloud-init template in Proxmox**:
    ```bash
    make create-cloudinit
    ```
@@ -51,17 +56,28 @@ Before running any commands, ensure you have the following tools installed:
    ```bash
    make terraform-init
    ```
+6. **Verify the upcomming changes in Terraform**:
+   ```bash
+   make terraform-plan
+   ```
+7. **Make the changes in Proxmox**:
+   ```bash
+   make terraform-apply
+   ```
 
 ## Available Commands
 
 ### Setup Commands
+
 - `make init-scripts` - Make all script files executable
 
 ### Proxmox Commands
+
 - `make create-ssh-to-pve` - Set up SSH access to Proxmox host
 - `make create-cloudinit` - Create cloud-init template on Proxmox
 
 ### Terraform Commands
+
 - `make terraform-init` - Initialize Terraform working directory
 - `make terraform-plan` - Show planned Terraform changes
 - `make terraform-apply` - Apply Terraform changes
