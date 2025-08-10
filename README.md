@@ -21,8 +21,6 @@ Before running any commands, ensure you have the following tools installed on yo
 
 ### Required Configuration Files
 
-**⚠️ All variable files must be properly configured before running any commands**
-
 1. **Environment Variables** - Copy and configure the main environment file:
 
    ```bash
@@ -60,7 +58,9 @@ Before running any commands, ensure you have the following tools installed on yo
    ```bash
    make terraform-plan
    ```
-   **This step is crucial as it also generates the execution plan that determines how many VMs will be created and their configuration.**
+   
+   > **Important:** This step also generates the VM configuration file that Terraform needs to create the infrastructure.
+
 7. **Make the changes in Proxmox**:
    ```bash
    make terraform-apply
