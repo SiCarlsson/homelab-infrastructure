@@ -4,7 +4,7 @@ terraform {
   required_providers {
     proxmox = {
       source  = "bpg/proxmox"
-      version = "~> 0.60"
+      version = "~> 0.81"
     }
   }
 }
@@ -27,7 +27,7 @@ variable "PROXMOX_API_TOKEN_SECRET" {
 }
 
 provider "proxmox" {
-  endpoint = var.PROXMOX_API_URL
+  endpoint  = var.PROXMOX_API_URL
   api_token = "${var.PROXMOX_API_TOKEN_ID}=${var.PROXMOX_API_TOKEN_SECRET}"
-  insecure = true
+  insecure  = true
 }

@@ -4,6 +4,7 @@
 
 GREEN='\033[32m'
 BLUE='\033[34m'
+YELLOW='\033[33m'
 RED='\033[31m'
 RESET='\033[0m'
 
@@ -13,7 +14,7 @@ iso_directory="${ISO_DIRECTORY:-./iso/}"
 iso_url="${ISO_URL:-https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-amd64.img}"
 
 template_name="${TEMPLATE_NAME:-ubuntu-cloud-template}"
-template_id="${TEMPLATE_ID:-901}"
+template_id="${TEMPLATE_ID:-900}"
 proxmox_host_name="${PROXMOX_HOST_NAME:-pve-1}"
 proxmox_host_ip="${PROXMOX_HOST_IP:-192.168.10.10}"
 proxmox_host_username="${PROXMOX_USERNAME:-root}"
@@ -21,6 +22,7 @@ proxmox_storage_name="${PROXMOX_STORAGE_NAME:-nvme}"
 
 
 echo -e "${BLUE}Starting cloud-init template creation process...${RESET}"
+echo -e "${YELLOW}You may be prompted for the Proxmox root password...${RESET}"
 
 ssh -o Compression=no -o TCPKeepAlive=yes $proxmox_host_username@$proxmox_host_ip << EOF
 export GREEN='\033[32m'
@@ -58,8 +60,16 @@ qm create $template_id --memory 2048 --core 2 --name $template_name --net0 virti
 
 qm importdisk $template_id $iso_file_name $proxmox_storage_name
 qm set $template_id --scsi0 $proxmox_storage_name:vm-$template_id-disk-0
+
 qm set $template_id --boot c --bootdisk scsi0
+
 qm set $template_id --ide2 $proxmox_storage_name:cloudinit
+
+qm set $template_id --serial0 socket --vga serial0
+
+qm set $template_id --scsihw virtio-scsi-pci
+
+qm set $template_id --scsi0 $proxmox_storage_name:vm-$template_id-disk-0,discard=on,ssd=1
 
 qm template $template_id
 
