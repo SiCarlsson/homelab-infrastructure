@@ -14,3 +14,4 @@ terraform/crash.*.log
 terraform/.terraformrc
 terraform/terraform.rc
 terraform/credentials.auto.tfvars
+terraform/local-vms.auto.tfvars

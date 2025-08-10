@@ -1,6 +1,8 @@
 #!/bin/bash
+
 # SSH Key Establisher to Proxmox Host
 # This script establishes an SSH connection to the Proxmox host
+# Expected to be run from Makefile with .env variables already loaded
 
 GREEN='\033[32m'
 BLUE='\033[34m'

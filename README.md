@@ -37,6 +37,29 @@ Before running any commands, ensure you have the following tools installed on yo
    ```
    Edit `terraform/credentials.auto.tfvars` with your Proxmox API credentials.
 
+### VM Configuration
+
+The `.env` file supports the following variables for configuring your local VMs:
+
+- `LOCAL_NUMBER_OF_VMS` - Number of VMs to create
+- `LOCAL_STARTING_IP_ADDRESS` - Starting IP address with subnet (e.g., `192.168.10.20/24`)
+- `LOCAL_STARTING_VM_ID` - Starting VM ID for Proxmox
+- `LOCAL_VM_NAME_PREFIX` - Prefix for VM names (default: `local-vm`)
+- `LOCAL_VM_CORES` - Number of CPU cores per VM (default: `2`)
+- `LOCAL_VM_MEMORY` - Memory in MB per VM (default: `4096`)
+
+Example configuration:
+```bash
+LOCAL_NUMBER_OF_VMS=3
+LOCAL_STARTING_IP_ADDRESS=192.168.10.20/24
+LOCAL_STARTING_VM_ID=300
+LOCAL_VM_NAME_PREFIX=docker-host
+LOCAL_VM_CORES=4
+LOCAL_VM_MEMORY=8192
+```
+
+This will create 3 VMs named `docker-host-01`, `docker-host-02`, `docker-host-03` with 4 cores and 8GB RAM each.
+
 ### Initial Setup Steps
 
 1. **Configure all variable files** (see sections above)
@@ -60,6 +83,7 @@ Before running any commands, ensure you have the following tools installed on yo
    ```bash
    make terraform-plan
    ```
+   **This step is crucial as it also generates the execution plan that determines how many VMs will be created and their configuration.**
 7. **Make the changes in Proxmox**:
    ```bash
    make terraform-apply

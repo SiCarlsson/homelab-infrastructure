@@ -1,6 +1,9 @@
 #!/bin/bash
+
 # Cloud-Init Template Creator for Proxmox
 # This script creates an Ubuntu cloud-init template that your Terraform can use
+# Expected to be run from Makefile with .env variables already loaded
+
 
 GREEN='\033[32m'
 BLUE='\033[34m'

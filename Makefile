@@ -34,6 +34,7 @@ terraform-init:
 
 # Plan Terraform changes
 terraform-plan:
+	./scripts/create-local-vms-tfvars.sh
 	cd terraform && terraform plan
 
 # Apply Terraform changes

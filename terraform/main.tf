@@ -1,9 +1,11 @@
 # This file creates the Proxmox Infrastructure using Terraform
 # It requires the Proxmox provider and the necessary credentials to be set up
 
-resource "proxmox_virtual_environment_vm" "network_vm" {
-  name      = var.LOCAL_DOCKER_VM_NAME
-  vm_id     = 300
+resource "proxmox_virtual_environment_vm" "local_vms" {
+  for_each = var.LOCAL_VMS
+
+  name      = each.value.name
+  vm_id     = each.value.vm_id
   node_name = "pve-1"
 
   agent {
@@ -15,11 +17,11 @@ resource "proxmox_virtual_environment_vm" "network_vm" {
   }
 
   cpu {
-    cores = 2
+    cores = each.value.cores
   }
 
   memory {
-    dedicated = 4096
+    dedicated = each.value.memory
   }
 
   initialization {
@@ -27,7 +29,7 @@ resource "proxmox_virtual_environment_vm" "network_vm" {
 
     ip_config {
       ipv4 {
-        address = var.LOCAL_DOCKER_VM_IP_ADDRESS
+        address = each.value.ip_address
         gateway = "192.168.10.1"
       }
     }
@@ -42,6 +44,6 @@ resource "proxmox_virtual_environment_vm" "network_vm" {
     }
   }
 
-  started = true
+  started         = true
   stop_on_destroy = true
 }
