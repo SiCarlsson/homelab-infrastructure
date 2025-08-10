@@ -28,23 +28,18 @@ create-cloudinit:
 ###
 # Terraform commands
 ###
-# Initialize Terraform
 terraform-init:
 	cd terraform && terraform init
 
-# Plan Terraform changes
 terraform-plan:
 	./scripts/create-local-vms-tfvars.sh
 	cd terraform && terraform plan
 
-# Apply Terraform changes
 terraform-apply:
 	cd terraform && terraform apply
 
-# Destroy Terraform infrastructure
 terraform-destroy:
 	cd terraform && terraform destroy
 
-# Validate Terraform configuration
 terraform-validate:
 	cd terraform && terraform validate
