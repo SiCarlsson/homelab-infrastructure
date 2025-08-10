@@ -1,5 +1,5 @@
 # Makefile for Terraform operations with environment variables
-.PHONY: terraform-plan terraform-apply terraform-destroy terraform-init terraform-validate create-cloudinit create-ssh-to-pve init-scripts
+.PHONY: terraform-plan terraform-apply terraform-destroy terraform-init terraform-validate create-cloudinit create-ssh-to-pve init-scripts ansible-generate-hosts ansible-install-docker ansible-ping
 
 # Load environment variables from .env file
 ifneq (,$(wildcard ./.env))
@@ -47,10 +47,11 @@ terraform-validate:
 ###
 # Ansible commands
 ###
-# Install Docker on all VMs
+ansible-generate-hosts:
+	./scripts/create-ansible-hosts.sh
+
 ansible-install-docker:
 	cd ansible && ansible-playbook -i inventory/hosts.yml playbooks/docker-setup.yml
 
-# Test Ansible connectivity
 ansible-ping:
 	cd ansible && ansible -i inventory/hosts.yml docker_hosts -m ping

@@ -1,5 +1,8 @@
 .env
 
+# Ansible
+ansible/inventory/hosts.yml
+
 # Terraform
 terraform/.terraform/
 terraform/.terraform.lock.hcl

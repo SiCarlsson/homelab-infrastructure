@@ -4,6 +4,12 @@ variable "PROXMOX_VM_SSH_PUBLIC_KEY" {
   sensitive   = true
 }
 
+variable "VM_USER" {
+  type        = string
+  description = "Username for VM access"
+  default     = "ubuntu"
+}
+
 variable "LOCAL_VMS" {
   type = map(object({
     name       = string

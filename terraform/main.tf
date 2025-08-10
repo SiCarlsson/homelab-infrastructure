@@ -46,7 +46,7 @@ resource "proxmox_virtual_environment_vm" "local_vms" {
     }
 
     user_account {
-      username = "ubuntu"
+      username = var.VM_USER
       keys     = [var.PROXMOX_VM_SSH_PUBLIC_KEY]
     }
   }
