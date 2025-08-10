@@ -1,11 +1,18 @@
 # Makefile for Terraform operations with environment variables
-.PHONY: plan apply destroy init validate create-cloudinit create-ssh-to-pve
+.PHONY: terraform-plan terraform-apply terraform-destroy terraform-init terraform-validate create-cloudinit create-ssh-to-pve init-scripts
 
 # Load environment variables from .env file
 ifneq (,$(wildcard ./.env))
     include .env
     export
 endif
+
+###
+# Setup commands
+###
+# Make all scripts executable
+init-scripts:
+	chmod +x scripts/*.sh
 
 ###
 # Proxmox commands
@@ -22,21 +29,21 @@ create-cloudinit:
 # Terraform commands
 ###
 # Initialize Terraform
-init:
+terraform-init:
 	cd terraform && terraform init
 
 # Plan Terraform changes
-plan:
+terraform-plan:
 	cd terraform && terraform plan
 
 # Apply Terraform changes
-apply:
+terraform-apply:
 	cd terraform && terraform apply
 
 # Destroy Terraform infrastructure
-destroy:
+terraform-destroy:
 	cd terraform && terraform destroy
 
 # Validate Terraform configuration
-validate:
+terraform-validate:
 	cd terraform && terraform validate

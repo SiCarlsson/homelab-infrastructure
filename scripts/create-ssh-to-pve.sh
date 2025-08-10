@@ -8,6 +8,7 @@ YELLOW='\033[33m'
 RED='\033[31m'
 RESET='\033[0m'
 
+# Use environment variables with defaults (loaded by Makefile from .env)
 proxmox_host_name="${PROXMOX_HOST_NAME:-pve-1}"
 proxmox_host_ip="${PROXMOX_HOST:-192.168.10.10}"
 proxmox_host_username="${PROXMOX_USERNAME:-root}"
