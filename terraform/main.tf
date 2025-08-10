@@ -2,7 +2,7 @@
 # It requires the Proxmox provider and the necessary credentials to be set up
 
 resource "proxmox_virtual_environment_vm" "network_vm" {
-  name      = var.NETWORK_VM_NAME
+  name      = var.LOCAL_DOCKER_VM_NAME
   vm_id     = 300
   node_name = "pve-1"
 
@@ -27,7 +27,7 @@ resource "proxmox_virtual_environment_vm" "network_vm" {
 
     ip_config {
       ipv4 {
-        address = var.NETWORK_VM_IP_ADDRESS
+        address = var.LOCAL_DOCKER_VM_IP_ADDRESS
         gateway = "192.168.10.1"
       }
     }
@@ -42,9 +42,6 @@ resource "proxmox_virtual_environment_vm" "network_vm" {
     }
   }
 
-  # Ensure VM starts after creation
   started = true
-
-  # Don't wait for guest agent if it's causing issues
   stop_on_destroy = true
 }

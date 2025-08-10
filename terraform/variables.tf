@@ -4,12 +4,12 @@ variable "PROXMOX_VM_SSH_PUBLIC_KEY" {
   sensitive   = true
 }
 
-variable "NETWORK_VM_NAME" {
+variable "LOCAL_DOCKER_VM_NAME" {
   type        = string
-  description = "Name of the network VM"
+  description = "Name of the local Docker VM"
 }
 
-variable "NETWORK_VM_IP_ADDRESS" {
+variable "LOCAL_DOCKER_VM_IP_ADDRESS" {
   type        = string
-  description = "IP address for the network VM"
+  description = "IP address for the local Docker VM"
 }
