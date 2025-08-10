@@ -80,7 +80,7 @@ Before running any commands, ensure you have the following tools installed on yo
 ### Terraform Commands
 
 - `make terraform-init` - Initialize Terraform working directory.
-- `make terraform-plan` - Show planned Terraform changes.
+- `make terraform-plan` - Show planned Terraform changes and generate VM configuration file.
 - `make terraform-apply` - Apply Terraform changes.
 - `make terraform-destroy` - Destroy Terraform-managed infrastructure.
 - `make terraform-validate` - Validate Terraform configuration.
