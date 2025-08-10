@@ -55,19 +55,20 @@ Before running any commands, ensure you have the following tools installed on yo
    make terraform-init
    ```
 6. **Verify the upcomming changes in Terraform**:
+
    ```bash
    make terraform-plan
    ```
-   
+
    > **Important:** This step also generates the VM configuration file that Terraform needs to create the infrastructure.
 
 7. **Make the changes in Proxmox**:
+
    ```bash
    make terraform-apply
    ```
 
    > **Important:** This step also generates the hosts file that Ansible needs to function.
-
 
 ## Available Commands
 
@@ -87,3 +88,9 @@ Before running any commands, ensure you have the following tools installed on yo
 - `make terraform-apply` - Apply Terraform changes.
 - `make terraform-destroy` - Destroy Terraform-managed infrastructure.
 - `make terraform-validate` - Validate Terraform configuration.
+
+### Ansible Commands
+
+- `make ansible-generate-hosts` - Generate Ansible hosts inventory file from Terraform state.
+- `make ansible-install-docker` - Install and configure Docker on all hosts using Ansible playbook.
+- `make ansible-ping` - Test connectivity to all hosts in the inventory.
