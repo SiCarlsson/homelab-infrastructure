@@ -38,6 +38,7 @@ VM_NAME_PREFIX="${LOCAL_VM_NAME_PREFIX:-local-vm}"
 
 VM_CORES="${LOCAL_VM_CORES:-2}"
 VM_MEMORY="${LOCAL_VM_MEMORY:-4096}"
+VM_DISK_SIZE="${LOCAL_VM_DISK_SIZE:-32}"
 
 IP_WITH_SUBNET="$LOCAL_STARTING_IP_ADDRESS"
 IP_ADDRESS="${IP_WITH_SUBNET%/*}"
@@ -70,6 +71,7 @@ for ((i=1; i<=LOCAL_NUMBER_OF_VMS; i++)); do
     echo "    ip_address = \"$VM_IP_ADDRESS\"" >> "$TFVARS_FILE"
     echo "    cores      = $VM_CORES" >> "$TFVARS_FILE"
     echo "    memory     = $VM_MEMORY" >> "$TFVARS_FILE"
+    echo "    disk_size  = $VM_DISK_SIZE" >> "$TFVARS_FILE"
     echo "  }" >> "$TFVARS_FILE"
 done
 
@@ -82,5 +84,5 @@ for ((i=1; i<=LOCAL_NUMBER_OF_VMS; i++)); do
     VM_ID=$((LOCAL_STARTING_VM_ID + i - 1))
     LAST_OCTET=$((STARTING_LAST_OCTET + i - 1))
     VM_IP_ADDRESS="$BASE_IP.$LAST_OCTET/$SUBNET"
-    echo -e "${BLUE}  - $VM_NAME (ID: $VM_ID, IP: $VM_IP_ADDRESS, Cores: $VM_CORES, Memory: ${VM_MEMORY}MB)${RESET}"
+    echo -e "${BLUE}  - $VM_NAME (ID: $VM_ID, IP: $VM_IP_ADDRESS, Cores: $VM_CORES, Memory: ${VM_MEMORY}MB, Disk: ${VM_DISK_SIZE}GB)${RESET}"
 done

@@ -24,6 +24,13 @@ resource "proxmox_virtual_environment_vm" "local_vms" {
     dedicated = each.value.memory
   }
 
+  disk {
+    datastore_id = "nvme"
+    interface    = "scsi0"
+    size         = each.value.disk_size
+    ssd          = true
+  }
+
   initialization {
     datastore_id = "nvme"
 

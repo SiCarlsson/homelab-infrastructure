@@ -1,0 +1,31 @@
+---
+- name: Install Docker and Docker Compose on homelab VMs
+  hosts: all
+  become: yes
+  gather_facts: yes
+
+  roles:
+    - role: ../roles/docker
+
+  post_tasks:
+    - name: Verify Docker installation
+      command: docker --version
+      register: docker_version
+      changed_when: false
+
+    - name: Verify Docker Compose installation
+      command: docker compose version
+      register: docker_compose_version
+      changed_when: false
+
+    - name: Verify Docker daemon is running
+      command: docker info
+      register: docker_info
+      changed_when: false
+
+    - name: Display success
+      debug:
+        msg:
+          - "✅ {{ docker_version.stdout }} installed successfully"
+          - "✅ {{ docker_compose_version.stdout }} installed successfully"
+          - "✅ Docker daemon is running and ready to use"

@@ -43,3 +43,14 @@ terraform-destroy:
 
 terraform-validate:
 	cd terraform && terraform validate
+
+###
+# Ansible commands
+###
+# Install Docker on all VMs
+ansible-install-docker:
+	cd ansible && ansible-playbook -i inventory/hosts.yml playbooks/docker-setup.yml
+
+# Test Ansible connectivity
+ansible-ping:
+	cd ansible && ansible -i inventory/hosts.yml docker_hosts -m ping

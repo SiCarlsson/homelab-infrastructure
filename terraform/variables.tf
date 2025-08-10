@@ -11,6 +11,7 @@ variable "LOCAL_VMS" {
     ip_address = string
     cores      = optional(number, 2)
     memory     = optional(number, 4096)
+    disk_size  = optional(number, 32)  # Disk size in GB
   }))
   description = "Map of Docker VMs with their configurations"
   default     = {}
