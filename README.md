@@ -66,6 +66,9 @@ Before running any commands, ensure you have the following tools installed on yo
    make terraform-apply
    ```
 
+   > **Important:** This step also generates the hosts file that Ansible needs to function.
+
+
 ## Available Commands
 
 ### Setup Commands
