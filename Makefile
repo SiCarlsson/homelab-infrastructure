@@ -35,9 +35,7 @@ terraform-plan:
 	./scripts/create-local-vms-tfvars.sh
 	cd terraform && terraform plan
 
-.ONESHELL
 terraform-apply:
-	set -e
 	cd terraform && terraform apply
 	./scripts/create-ansible-hosts.sh
 
