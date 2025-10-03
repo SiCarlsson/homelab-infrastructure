@@ -5,8 +5,6 @@ Homepage
 
 AdGuard
 
-Nginx Proxy Manager
-
 Logseq
 
 Vaultwarden?
