@@ -6,9 +6,6 @@ services:
     environment:
       - API_KEY={{ cloudflare_api_token }}
       - ZONE={{ cloudflare_zone }}
-{% if cloudflare_subdomain is defined and cloudflare_subdomain != "" %}
-      - SUBDOMAIN={{ cloudflare_subdomain }}
-{% endif %}
 {% if cloudflare_ddns_records is defined %}
       - RECORDS={{ cloudflare_ddns_records }}
 {% endif %}

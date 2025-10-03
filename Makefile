@@ -92,4 +92,4 @@ ansible-install-cloudflare-ddns:
 	ansible-playbook -i ansible/inventory/hosts.yml ansible/playbooks/cloudflare-ddns-setup.yml \
 		-e cloudflare_api_token="$(CLOUDFLARE_API_TOKEN)" \
 		-e cloudflare_zone="$(CLOUDFLARE_ZONE)" \
-		$(if $(CLOUDFLARE_SUBDOMAIN),-e cloudflare_subdomain="$(CLOUDFLARE_SUBDOMAIN)",)
+		$(if $(CLOUDFLARE_DDNS_RECORDS),-e cloudflare_ddns_records="$(CLOUDFLARE_DDNS_RECORDS)",)
