@@ -18,10 +18,23 @@ iso_url="${ISO_URL:-https://cloud-images.ubuntu.com/noble/current/noble-server-c
 
 template_name="${TEMPLATE_NAME:-ubuntu-cloud-template}"
 template_id="${TEMPLATE_ID:-900}"
-proxmox_host_name="${PROXMOX_HOST_NAME:-pve-1}"
-proxmox_host_ip="${PROXMOX_HOST_IP:-192.168.10.10}"
+proxmox_host_name="${PROXMOX_HOST_NAME}"
+proxmox_host_ip="${PROXMOX_HOST_IP}"
 proxmox_host_username="${PROXMOX_USERNAME:-root}"
 proxmox_storage_name="${PROXMOX_STORAGE_NAME:-nvme}"
+
+# Validate mandatory variables
+if [[ -z "$proxmox_host_name" ]]; then
+    echo -e "${RED}Error: PROXMOX_HOST_NAME environment variable is not set${RESET}"
+    echo -e "${RED}Make sure this variable is defined in your .env file${RESET}"
+    exit 1
+fi
+
+if [[ -z "$proxmox_host_ip" ]]; then
+    echo -e "${RED}Error: PROXMOX_HOST_IP environment variable is not set${RESET}"
+    echo -e "${RED}Make sure this variable is defined in your .env file${RESET}"
+    exit 1
+fi
 
 
 echo -e "${BLUE}Starting cloud-init template creation process...${RESET}"
