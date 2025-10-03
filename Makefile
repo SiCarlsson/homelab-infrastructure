@@ -8,11 +8,27 @@ ifneq (,$(wildcard ./.env))
 endif
 
 ###
+# Quick commands
+###
+quick-init:
+	$(MAKE) init-scripts
+	$(MAKE) create-ssh-to-pve
+	$(MAKE) create-cloudinit
+	$(MAKE) terraform-init
+
+quick-terraform:
+	./scripts/create-vms-tfvars.sh
+	./scripts/create-ansible-hosts.sh
+	cd terraform && terraform apply -auto-approve
+
+
+###
 # Setup commands
 ###
 # Make all scripts executable
 init-scripts:
 	chmod +x scripts/*.sh
+
 
 ###
 # Proxmox commands
@@ -24,6 +40,7 @@ create-ssh-to-pve:
 # Create cloud-init template
 create-cloudinit:
 	./scripts/create-cloud-init-template.sh
+
 
 ###
 # Terraform commands
@@ -44,6 +61,7 @@ terraform-destroy:
 
 terraform-validate:
 	cd terraform && terraform validate
+
 
 ###
 # Ansible commands
