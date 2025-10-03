@@ -36,8 +36,8 @@ terraform-plan:
 	cd terraform && terraform plan
 
 terraform-apply:
-	cd terraform && terraform apply -auto-approve
 	./scripts/create-ansible-hosts.sh
+	cd terraform && terraform apply -auto-approve
 
 terraform-destroy:
 	cd terraform && terraform destroy -auto-approve
@@ -52,7 +52,7 @@ ansible-generate-hosts:
 	./scripts/create-ansible-hosts.sh
 
 ansible-install-docker:
-	cd ansible && ansible-playbook -i inventory/hosts.yml playbooks/docker-setup.yml
+	ansible-playbook -i ansible/inventory/hosts.yml playbooks/docker-setup.yml
 
 ansible-ping:
-	ansible -i ansible/inventory/hosts.yml docker_hosts -m ping
+	ansible -i ansible/inventory/hosts.yml all -m ping
