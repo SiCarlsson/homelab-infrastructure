@@ -1,13 +1,27 @@
-Cloudflare DDNS
-  docker-image: oznu/cloudflare-ddns:latest
-
 Homepage
 
 AdGuard
 
 Logseq
 
-Vaultwarden?
+Vaultwarden
 
-Wireguard?
+Portainer
 
+Uptime Kuma
+
+Grafana + Prometheus
+
+Loki?
+
+Gitea/Gitlab/Jenkins
+
+Home Assistant?
+
+Nextcloud?
+
+PostgreSQL servers
+
+ChangeDetection
+
+Nginx (webserver)
