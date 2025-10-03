@@ -55,4 +55,4 @@ ansible-install-docker:
 	cd ansible && ansible-playbook -i inventory/hosts.yml playbooks/docker-setup.yml
 
 ansible-ping:
-	cd ansible && ansible -i inventory/hosts.yml docker_hosts -m ping
+	ansible -i ansible/inventory/hosts.yml docker_hosts -m ping
