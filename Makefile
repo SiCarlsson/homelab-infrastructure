@@ -36,11 +36,11 @@ terraform-plan:
 	cd terraform && terraform plan
 
 terraform-apply:
-	cd terraform && terraform apply
+	cd terraform && terraform apply -auto-approve
 	./scripts/create-ansible-hosts.sh
 
 terraform-destroy:
-	cd terraform && terraform destroy
+	cd terraform && terraform destroy -auto-approve
 
 terraform-validate:
 	cd terraform && terraform validate

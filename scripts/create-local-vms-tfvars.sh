@@ -34,19 +34,18 @@ if [[ -z "${LOCAL_STARTING_VM_ID:-}" ]]; then
     exit 1
 fi
 
-VM_NAME_PREFIX="${LOCAL_VM_NAME_PREFIX:-local-vm}"
+LOCAL_VM_NAME_PREFIX="${LOCAL_VM_NAME_PREFIX:-local-vm}"
+LOCAL_VM_CORES="${LOCAL_VM_CORES:-2}"
+LOCAL_VM_MEMORY="${LOCAL_VM_MEMORY:-4096}"
+LOCAL_VM_DISK_SIZE="${LOCAL_VM_DISK_SIZE:-32}"
 
-VM_CORES="${LOCAL_VM_CORES:-2}"
-VM_MEMORY="${LOCAL_VM_MEMORY:-4096}"
-VM_DISK_SIZE="${LOCAL_VM_DISK_SIZE:-32}"
+LOCAL_IP_WITH_SUBNET="$LOCAL_STARTING_IP_ADDRESS"
+LOCAL_IP_ADDRESS="${LOCAL_IP_WITH_SUBNET%/*}"
+LOCAL_SUBNET="${LOCAL_IP_WITH_SUBNET#*/}"
 
-IP_WITH_SUBNET="$LOCAL_STARTING_IP_ADDRESS"
-IP_ADDRESS="${IP_WITH_SUBNET%/*}"
-SUBNET="${IP_WITH_SUBNET#*/}"
-
-IFS='.' read -r -a IP_OCTETS <<< "$IP_ADDRESS"
-BASE_IP="${IP_OCTETS[0]}.${IP_OCTETS[1]}.${IP_OCTETS[2]}"
-STARTING_LAST_OCTET="${IP_OCTETS[3]}"
+IFS='.' read -r -a IP_OCTETS <<< "$LOCAL_IP_ADDRESS"
+LOCAL_BASE_IP="${IP_OCTETS[0]}.${IP_OCTETS[1]}.${IP_OCTETS[2]}"
+LOCAL_STARTING_LAST_OCTET="${IP_OCTETS[3]}"
 
 echo -e "${GREEN}Generating tfvars with loaded environment variables.${RESET}"
 
@@ -59,19 +58,19 @@ LOCAL_VMS = {
 EOF
 
 for ((i=1; i<=LOCAL_NUMBER_OF_VMS; i++)); do
-    VM_KEY="$VM_NAME_PREFIX-$i"
-    VM_NAME="$VM_NAME_PREFIX-$(printf "%02d" $i)"
-    VM_ID=$((LOCAL_STARTING_VM_ID + i - 1))
-    LAST_OCTET=$((STARTING_LAST_OCTET + i - 1))
-    VM_IP_ADDRESS="$BASE_IP.$LAST_OCTET/$SUBNET"
+    LOCAL_VM_KEY="$LOCAL_VM_NAME_PREFIX-$i"
+    LOCAL_VM_NAME="$LOCAL_VM_NAME_PREFIX-$(printf "%02d" $i)"
+    LOCAL_VM_ID=$((LOCAL_STARTING_VM_ID + i - 1))
+    LAST_OCTET=$((LOCAL_STARTING_LAST_OCTET + i - 1))
+    VM_IP_ADDRESS="$LOCAL_BASE_IP.$LAST_OCTET/$LOCAL_SUBNET"
 
-    echo "  \"$VM_KEY\" = {" >> "$TFVARS_FILE"
-    echo "    name       = \"$VM_NAME\"" >> "$TFVARS_FILE"
-    echo "    vm_id      = $VM_ID" >> "$TFVARS_FILE"
+    echo "  \"$LOCAL_VM_KEY\" = {" >> "$TFVARS_FILE"
+    echo "    name       = \"$LOCAL_VM_NAME\"" >> "$TFVARS_FILE"
+    echo "    vm_id      = $LOCAL_VM_ID" >> "$TFVARS_FILE"
     echo "    ip_address = \"$VM_IP_ADDRESS\"" >> "$TFVARS_FILE"
-    echo "    cores      = $VM_CORES" >> "$TFVARS_FILE"
-    echo "    memory     = $VM_MEMORY" >> "$TFVARS_FILE"
-    echo "    disk_size  = $VM_DISK_SIZE" >> "$TFVARS_FILE"
+    echo "    cores      = $LOCAL_VM_CORES" >> "$TFVARS_FILE"
+    echo "    memory     = $LOCAL_VM_MEMORY" >> "$TFVARS_FILE"
+    echo "    disk_size  = $LOCAL_VM_DISK_SIZE" >> "$TFVARS_FILE"
     echo "  }" >> "$TFVARS_FILE"
 done
 
@@ -80,9 +79,9 @@ echo "" >> "$TFVARS_FILE"
 
 echo -e "${GREEN}Successfully generated $TFVARS_FILE with $LOCAL_NUMBER_OF_VMS VMs${RESET}"
 for ((i=1; i<=LOCAL_NUMBER_OF_VMS; i++)); do
-    VM_NAME="$VM_NAME_PREFIX-$(printf "%02d" $i)"
-    VM_ID=$((LOCAL_STARTING_VM_ID + i - 1))
-    LAST_OCTET=$((STARTING_LAST_OCTET + i - 1))
-    VM_IP_ADDRESS="$BASE_IP.$LAST_OCTET/$SUBNET"
-    echo -e "${BLUE}  - $VM_NAME (ID: $VM_ID, IP: $VM_IP_ADDRESS, Cores: $VM_CORES, Memory: ${VM_MEMORY}MB, Disk: ${VM_DISK_SIZE}GB)${RESET}"
+    LOCAL_VM_NAME="$LOCAL_VM_NAME_PREFIX-$(printf "%02d" $i)"
+    LOCAL_VM_ID=$((LOCAL_STARTING_VM_ID + i - 1))
+    LAST_OCTET=$((LOCAL_STARTING_LAST_OCTET + i - 1))
+    LOCAL_VM_IP_ADDRESS="$LOCAL_BASE_IP.$LAST_OCTET/$LOCAL_SUBNET"
+    echo -e "${BLUE}  - $LOCAL_VM_NAME (ID: $LOCAL_VM_ID, IP: $LOCAL_VM_IP_ADDRESS, Cores: $LOCAL_VM_CORES, Memory: ${LOCAL_VM_MEMORY}MB, Disk: ${LOCAL_VM_DISK_SIZE}GB)${RESET}"
 done
