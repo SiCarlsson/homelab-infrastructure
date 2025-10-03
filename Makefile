@@ -70,7 +70,10 @@ ansible-generate-hosts:
 	./scripts/create-ansible-hosts.sh
 
 ansible-install-docker:
-	ansible-playbook -i ansible/inventory/hosts.yml playbooks/docker-setup.yml
+	ansible-playbook -i ansible/inventory/hosts.yml ansible/playbooks/docker-setup.yml
+
+ansible-install-traefik:
+	ansible-playbook -i ansible/inventory/hosts.yml ansible/playbooks/traefik-setup.yml
 
 ansible-ping:
 	ansible -i ansible/inventory/hosts.yml all -m ping

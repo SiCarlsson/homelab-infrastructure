@@ -1,0 +1,42 @@
+---
+# Simple Traefik installation
+- name: Ensure Docker is running
+  systemd:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: Create traefik directory
+  file:
+    path: /opt/traefik
+    state: directory
+    mode: "0755"
+
+- name: Create traefik network
+  shell: docker network create traefik || true
+
+- name: Create simple traefik docker-compose file
+  template:
+    src: docker-compose.yml.j2
+    dest: /opt/traefik/docker-compose.yml
+    mode: "0644"
+
+- name: Start traefik using docker compose
+  shell: |
+    cd /opt/traefik
+    docker compose up -d
+  args:
+    creates: /opt/traefik/.started
+
+- name: Mark traefik as started
+  file:
+    path: /opt/traefik/.started
+    state: touch
+
+- name: Wait a moment for Traefik to start
+  pause:
+    seconds: 5
+
+- name: Show success message
+  debug:
+    msg: "✅ Traefik is running! Dashboard: http://{{ ansible_host }}:8080"

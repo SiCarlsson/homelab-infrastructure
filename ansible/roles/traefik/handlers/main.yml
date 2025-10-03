@@ -1,0 +1,5 @@
+---
+- name: restart traefik
+  shell: |
+    cd /opt/traefik
+    docker compose restart

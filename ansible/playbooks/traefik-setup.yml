@@ -1,0 +1,15 @@
+---
+- name: Install Traefik (simple setup)
+  hosts: local_docker_hosts
+  become: yes
+
+  roles:
+    - role: ../roles/traefik
+
+  post_tasks:
+    - name: Show how to access Traefik
+      debug:
+        msg:
+          - "🎉 Traefik is now running!"
+          - "📋 Dashboard: http://{{ ansible_host }}:8080"
+          - "🔧 Your apps will be available on port 80"
