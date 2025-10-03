@@ -21,6 +21,16 @@ quick-terraform:
 	./scripts/create-ansible-hosts.sh
 	cd terraform && terraform apply -auto-approve
 
+quick-ansible:
+	$(MAKE) ansible-install-docker
+	$(MAKE) ansible-install-traefik
+	$(MAKE) ansible-install-cloudflare-ddns
+
+quick-up-all:
+	$(MAKE) quick-init
+	$(MAKE) quick-terraform
+	$(MAKE) quick-ansible
+
 
 ###
 # Setup commands
@@ -69,11 +79,17 @@ terraform-validate:
 ansible-generate-hosts:
 	./scripts/create-ansible-hosts.sh
 
+ansible-ping:
+	ansible -i ansible/inventory/hosts.yml all -m ping
+
 ansible-install-docker:
 	ansible-playbook -i ansible/inventory/hosts.yml ansible/playbooks/docker-setup.yml
 
 ansible-install-traefik:
 	ansible-playbook -i ansible/inventory/hosts.yml ansible/playbooks/traefik-setup.yml
 
-ansible-ping:
-	ansible -i ansible/inventory/hosts.yml all -m ping
+ansible-install-cloudflare-ddns:
+	ansible-playbook -i ansible/inventory/hosts.yml ansible/playbooks/cloudflare-ddns-setup.yml \
+		-e cloudflare_api_token="$(CLOUDFLARE_API_TOKEN)" \
+		-e cloudflare_zone="$(CLOUDFLARE_ZONE)" \
+		$(if $(CLOUDFLARE_SUBDOMAIN),-e cloudflare_subdomain="$(CLOUDFLARE_SUBDOMAIN)",)

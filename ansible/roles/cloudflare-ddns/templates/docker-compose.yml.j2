@@ -1,0 +1,28 @@
+services:
+  cloudflare-ddns:
+    image: {{ cloudflare_ddns_image }}
+    container_name: {{ cloudflare_ddns_container_name }}
+    restart: {{ cloudflare_ddns_restart_policy }}
+    environment:
+      - API_KEY={{ cloudflare_api_token }}
+      - ZONE={{ cloudflare_zone }}
+{% if cloudflare_subdomain is defined and cloudflare_subdomain != "" %}
+      - SUBDOMAIN={{ cloudflare_subdomain }}
+{% endif %}
+{% if cloudflare_ddns_records is defined %}
+      - RECORDS={{ cloudflare_ddns_records }}
+{% endif %}
+      - PROXIED={{ cloudflare_ddns_proxied }}
+      - RRTYPE=A
+      - DELETE_ON_STOP=false
+      - INTERFACE=eth0
+      - CUSTOM_LOOKUP_CMD=curl -s https://ipv4.icanhazip.com
+    networks:
+      - traefik
+    # No ports exposed - this is a background service
+    labels:
+      - "traefik.enable=false"  # DDNS doesn't need web interface
+
+networks:
+  traefik:
+    external: true

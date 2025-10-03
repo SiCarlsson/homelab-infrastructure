@@ -1,0 +1,7 @@
+---
+- name: restart cloudflare ddns
+  community.docker.docker_compose_v2:
+    project_src: "{{ cloudflare_ddns_compose_dir }}"
+    state: present
+    pull: always
+    recreate: always

@@ -1,0 +1,27 @@
+---
+- name: Validate required variables
+  fail:
+    msg: "{{ item }} is required but not defined"
+  when: item is not defined or item == ""
+  loop:
+    - cloudflare_api_token
+    - cloudflare_zone
+
+- name: Create Cloudflare DDNS directory
+  file:
+    path: "{{ cloudflare_ddns_compose_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Generate Cloudflare DDNS docker-compose.yml
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ cloudflare_ddns_compose_dir }}/docker-compose.yml"
+    mode: "0644"
+  notify: restart cloudflare ddns
+
+- name: Start Cloudflare DDNS service
+  community.docker.docker_compose_v2:
+    project_src: "{{ cloudflare_ddns_compose_dir }}"
+    state: present
+    pull: always

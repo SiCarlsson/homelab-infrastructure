@@ -1,0 +1,15 @@
+---
+# Cloudflare DDNS default variables
+
+cloudflare_ddns_image: "oznu/cloudflare-ddns:latest"
+
+cloudflare_ddns_container_name: "cloudflare-ddns"
+cloudflare_ddns_restart_policy: "unless-stopped"
+
+cloudflare_ddns_compose_dir: "/opt/cloudflare-ddns"
+
+# Optional: Proxied through Cloudflare (true/false)
+cloudflare_ddns_proxied: "false"
+
+# Update interval in seconds
+cloudflare_ddns_interval: "300"

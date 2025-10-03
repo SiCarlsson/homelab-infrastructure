@@ -1,0 +1,6 @@
+---
+- name: Deploy Cloudflare DDNS
+  hosts: all
+  become: yes
+  roles:
+    - role: ../roles/cloudflare-ddns
