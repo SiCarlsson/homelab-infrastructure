@@ -1,7 +1,5 @@
 # 🏠 Homelab Infrastructure
 
-**⚠️ Work in progress ⚠️**
-
 This repository contains the **Infrastructure as Code (IaC)** setup for my personal homelab.
 
 It uses:
@@ -9,6 +7,13 @@ It uses:
 - **Proxmox VE** for virtualization and container management.
 - **Ansible** for configuring and deploying services inside the VMs.
 - **Terraform** for provisioning virtual machines and networks on Proxmox.
+
+## Self-hosted services
+
+- **Cloudflare DDNS**
+  - Handles changes of my personal IP-address at home. Simplifies usage of VPNs and remote access to services.
+- **Traefik**
+  - Reverse proxy and load balancer that automatically routes traffic to services. Also provides a web dashboard for monitoring.
 
 ## Setup
 
@@ -18,6 +23,8 @@ Before running any commands, ensure you have the following tools installed on yo
 
 - **Terraform**
 - **Ansible**
+
+**NOTE:** This repository is designed for single-node Proxmox VE environments only.
 
 ### Required Configuration Files
 
@@ -38,39 +45,39 @@ Before running any commands, ensure you have the following tools installed on yo
 ### Initial Setup Steps
 
 1. **Configure all variable files** (see sections above)
-2. **Make scripts executable**:
-   ```bash
-   make init-scripts
-   ```
-3. **Set up SSH access to Proxmox**:
-   ```bash
-   make create-ssh-to-pve
-   ```
-4. **Create cloud-init template in Proxmox**:
-   ```bash
-   make create-cloudinit
-   ```
-5. **Initialize Terraform**:
-   ```bash
-   make terraform-init
-   ```
-6. **Verify the upcomming changes in Terraform**:
+
+2. **Initial setup and preparation**:
 
    ```bash
-   make terraform-plan
+   make quick-init
    ```
 
-   > **Important:** This step also generates the VM configuration file that Terraform needs to create the infrastructure.
+   This will make scripts executable, set up SSH access to Proxmox, create cloud-init template, and initialize Terraform.
 
-7. **Make the changes in Proxmox**:
+3. **Create infrastructure**:
 
    ```bash
-   make terraform-apply
+   make quick-terraform
    ```
 
-   > **Important:** This step also generates the hosts file that Ansible needs to function.
+   This will generate VM configuration files, apply Terraform changes to create VMs, and generate Ansible hosts inventory.
+
+4. **Install services**:
+   ```bash
+   make quick-ansible
+   ```
+   This will install Docker, Traefik reverse proxy, and Cloudflare DDNS service on all VMs.
+
+> **Note:** If you prefer more granular control, see the individual commands in the [Available Commands](#available-commands) section below.
 
 ## Available Commands
+
+### Quick Commands (Automation)
+
+- `make quick-init` - Run all initial setup steps (init-scripts, create-ssh-to-pve, create-cloudinit, terraform-init).
+- `make quick-terraform` - Generate configuration files and apply Terraform changes automatically.
+- `make quick-ansible` - Install all services (Docker, Traefik, Cloudflare DDNS) on all hosts.
+- `make quick-up-all` - Complete setup from scratch (runs quick-init, quick-terraform, quick-ansible).
 
 ### Setup Commands
 
@@ -92,5 +99,7 @@ Before running any commands, ensure you have the following tools installed on yo
 ### Ansible Commands
 
 - `make ansible-generate-hosts` - Generate Ansible hosts inventory file from Terraform state.
-- `make ansible-install-docker` - Install and configure Docker on all hosts using Ansible playbook.
 - `make ansible-ping` - Test connectivity to all hosts in the inventory.
+- `make ansible-install-docker` - Install and configure Docker on all hosts using Ansible playbook.
+- `make ansible-install-traefik` - Install and configure Traefik reverse proxy on all hosts.
+- `make ansible-install-cloudflare-ddns` - Install and configure Cloudflare DDNS service on all hosts.
