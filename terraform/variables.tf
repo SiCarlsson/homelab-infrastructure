@@ -17,8 +17,21 @@ variable "LOCAL_VMS" {
     ip_address = string
     cores      = optional(number, 2)
     memory     = optional(number, 4096)
-    disk_size  = optional(number, 32)  # Disk size in GB
+    disk_size  = optional(number, 32)
   }))
-  description = "Map of Docker VMs with their configurations"
+  description = "Map of Local VMs with their configurations"
+  default     = {}
+}
+
+variable "PUBLIC_VMS" {
+  type = map(object({
+    name       = string
+    vm_id      = number
+    ip_address = string
+    cores      = optional(number, 2)
+    memory     = optional(number, 4096)
+    disk_size  = optional(number, 32)
+  }))
+  description = "Map of Public VMs with their configurations"
   default     = {}
 }

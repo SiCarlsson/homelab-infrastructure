@@ -32,7 +32,7 @@ terraform-init:
 	cd terraform && terraform init
 
 terraform-plan:
-	./scripts/create-local-vms-tfvars.sh
+	./scripts/create-vms-tfvars.sh
 	cd terraform && terraform plan
 
 terraform-apply:

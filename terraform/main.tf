@@ -54,3 +54,57 @@ resource "proxmox_virtual_environment_vm" "local_vms" {
   started         = true
   stop_on_destroy = true
 }
+
+resource "proxmox_virtual_environment_vm" "public_vms" {
+  for_each = var.PUBLIC_VMS
+
+  name      = each.value.name
+  vm_id     = each.value.vm_id
+  node_name = "pve-1"
+
+  agent {
+    enabled = false
+  }
+
+  clone {
+    vm_id = 900
+  }
+
+  cpu {
+    cores = each.value.cores
+  }
+
+  memory {
+    dedicated = each.value.memory
+  }
+
+  disk {
+    datastore_id = "nvme"
+    interface    = "scsi0"
+    size         = each.value.disk_size
+    ssd          = true
+  }
+
+  initialization {
+    datastore_id = "nvme"
+
+    ip_config {
+      ipv4 {
+        address = each.value.ip_address
+        gateway = "192.168.10.1"
+      }
+    }
+
+    dns {
+      servers = ["192.168.10.1", "8.8.8.8"]
+    }
+
+    user_account {
+      username = var.VM_USER
+      keys     = [var.PROXMOX_VM_SSH_PUBLIC_KEY]
+    }
+  }
+
+  started         = true
+  stop_on_destroy = true
+}

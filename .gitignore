@@ -18,3 +18,4 @@ terraform/.terraformrc
 terraform/terraform.rc
 terraform/credentials.auto.tfvars
 terraform/local-vms.auto.tfvars
+terraform/public-vms.auto.tfvars
