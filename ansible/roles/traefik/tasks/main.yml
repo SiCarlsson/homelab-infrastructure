@@ -1,16 +1,30 @@
 ---
 # Simple Traefik installation
-- name: Ensure Docker is running
+- name: Ensure Docker service is running
   systemd:
     name: docker
     state: started
     enabled: yes
 
-- name: Create traefik directory
+- name: Create traefik directories
   file:
-    path: /opt/traefik
+    path: "{{ item }}"
     state: directory
     mode: "0755"
+    owner: root
+    group: root
+  loop:
+    - "/opt/traefik"
+    - "{{ traefik_data_dir }}"
+
+- name: Create acme.json file for Let's Encrypt certificates
+  file:
+    path: "{{ traefik_data_dir }}/acme.json"
+    state: touch
+    mode: "0600"
+    owner: root
+    group: root
+  when: traefik_enable_ssl
 
 - name: Create traefik network
   shell: docker network create traefik || true
@@ -37,6 +51,11 @@
   pause:
     seconds: 5
 
-- name: Show success message
+- name: Display setup completion message
   debug:
-    msg: "✅ Traefik is running! Dashboard: http://{{ ansible_host }}:8080"
+    msg: |
+      ✅ Traefik is running!
+      📊 Dashboard: http://{{ ansible_host }}:8080
+      {% if traefik_enable_ssl %}🔒 HTTPS enabled with Let's Encrypt + Cloudflare DNS
+      🌐 Domain: {{ traefik_domain }}
+      📧 Let's Encrypt email: {{ traefik_email }}{% else %}⚠️  HTTP only - no SSL configured{% endif %}

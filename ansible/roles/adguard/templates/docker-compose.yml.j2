@@ -1,0 +1,36 @@
+services:
+  {{ adguard_container_name }}:
+    image: adguard/adguardhome:{{ adguard_version }}
+    container_name: {{ adguard_container_name }}
+    restart: unless-stopped
+    ports:
+      # DNS ports
+      - "{{ adguard_dns_port }}:53/tcp"
+      - "{{ adguard_dns_port }}:53/udp"
+{% if not adguard_enable_traefik %}
+      # Web interface (only if not using Traefik)
+      - "{{ adguard_web_port }}:3000"
+{% endif %}
+    volumes:
+      - "{{ adguard_data_dir }}:/opt/adguardhome/work"
+      - "{{ adguard_config_dir }}:/opt/adguardhome/conf"
+{% if adguard_enable_traefik %}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.adguard.rule=Host(`{{ adguard_domain }}`)"
+      - "traefik.http.routers.adguard.entrypoints=websecure"
+      - "traefik.http.routers.adguard.tls.certresolver=cloudflare"
+      - "traefik.http.services.adguard.loadbalancer.server.port=3000"
+      - "traefik.docker.network={{ adguard_docker_network }}"
+    networks:
+      - {{ adguard_docker_network }}
+      - default
+{% endif %}
+
+networks:
+{% if adguard_enable_traefik %}
+  {{ adguard_docker_network }}:
+    external: true
+{% endif %}
+  default:
+    driver: bridge

@@ -1,0 +1,96 @@
+---
+- name: Check if port 53 is in use by systemd-resolved
+  shell: "ss -tlnp | grep ':53 '"
+  register: port_53_check
+  failed_when: false
+  changed_when: false
+
+- name: Display port usage info
+  debug:
+    msg:
+      - "ℹ️  Port 53 status check completed"
+      - "📝 Note: AdGuard will use port {{ adguard_dns_port }} to avoid conflicts with systemd-resolved"
+
+- name: Configure systemd-resolved to forward sicar.se domains to AdGuard
+  blockinfile:
+    path: /etc/systemd/resolved.conf
+    block: |
+      # Forward sicar.se domains to local AdGuard
+      [Resolve]
+      DNS=127.0.0.1#{{ adguard_dns_port }}
+      Domains=~sicar.se
+    marker: "# {mark} ANSIBLE MANAGED BLOCK - AdGuard DNS forwarding"
+    backup: yes
+  become: yes
+  notify: restart systemd-resolved
+
+- name: Restart systemd-resolved to apply AdGuard forwarding
+  systemd:
+    name: systemd-resolved
+    state: restarted
+  become: yes
+
+- name: Verify Docker is installed and running
+  systemd:
+    name: docker
+    state: started
+    enabled: yes
+  become: yes
+
+- name: Create AdGuard directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: "0755"
+    owner: root
+    group: root
+  loop:
+    - "{{ adguard_data_dir }}"
+    - "{{ adguard_config_dir }}"
+    - "/opt/adguard"
+
+- name: Check if Traefik network exists
+  shell: docker network inspect {{ adguard_docker_network }}
+  register: traefik_network_check
+  failed_when: false
+  changed_when: false
+  when: adguard_enable_traefik
+
+- name: Create Traefik network if it doesn't exist
+  shell: docker network create {{ adguard_docker_network }}
+  when:
+    - adguard_enable_traefik
+    - traefik_network_check.rc != 0
+
+- name: Create AdGuard configuration file
+  template:
+    src: AdGuardHome.yaml.j2
+    dest: "{{ adguard_config_dir }}/AdGuardHome.yaml"
+    mode: "0644"
+    owner: root
+    group: root
+
+- name: Create AdGuard docker-compose file
+  template:
+    src: docker-compose.yml.j2
+    dest: /opt/adguard/docker-compose.yml
+    mode: "0644"
+  notify: restart adguard
+
+- name: Start AdGuard using docker compose
+  shell: |
+    cd /opt/adguard
+    docker compose up -d
+
+- name: Wait for AdGuard to start
+  pause:
+    seconds: 5
+
+- name: Show success message
+  debug:
+    msg:
+      - "✅ AdGuard Home is running!"
+      - "🌐 Web interface: {% if adguard_enable_traefik %}http://{{ adguard_domain }}{% else %}http://{{ ansible_host }}:{{ adguard_web_port }}{% endif %}"
+      - "🔧 DNS server: {{ ansible_host }}:{{ adguard_dns_port }}"
+      - "📊 Configured {{ adguard_dns_records | length }} custom DNS records"
+      - "🛡️ Ad-blocking with {{ adguard_blocklists | length }} blocklists enabled"

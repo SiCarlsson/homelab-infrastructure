@@ -12,16 +12,19 @@
       command: docker --version
       register: docker_version
       changed_when: false
+      become: no
 
     - name: Verify Docker Compose installation
       command: docker compose version
       register: docker_compose_version
       changed_when: false
+      become: no
 
     - name: Verify Docker daemon is running
       command: docker info
       register: docker_info
       changed_when: false
+      become: no
 
     - name: Display success
       debug:

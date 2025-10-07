@@ -1,4 +1,18 @@
 ---
+- name: Update apt cache
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Install prerequisite packages
+  apt:
+    name:
+      - ca-certificates
+      - curl
+      - gnupg
+      - lsb-release
+    state: present
+
 - name: Install Docker using convenience script
   shell: |
     curl -fsSL https://get.docker.com -o get-docker.sh
@@ -7,14 +21,40 @@
   args:
     creates: /usr/bin/docker
 
+- name: Reload systemd daemon after Docker installation
+  systemd:
+    daemon_reload: yes
+
+- name: Wait for Docker service to be available and start it
+  shell: |
+    # Wait for systemd to recognize the service
+    for i in {1..10}; do
+      if systemctl list-unit-files | grep -q docker.service; then
+        systemctl enable docker
+        systemctl start docker
+        break
+      fi
+      sleep 2
+    done
+  register: docker_start_result
+  changed_when: false
+
+- name: Verify Docker service is running
+  systemd:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: Ensure docker group exists
+  group:
+    name: docker
+    state: present
+
 - name: Add user to docker group
   user:
     name: "{{ ansible_user }}"
     groups: docker
     append: yes
 
-- name: Start and enable Docker service
-  systemd:
-    name: docker
-    state: started
-    enabled: yes
+- name: Reset SSH connection to apply group membership
+  meta: reset_connection

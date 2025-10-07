@@ -1,0 +1,48 @@
+---
+# AdGuard Home configuration - Simple ad-blocking & DNS records
+adguard_version: "latest"
+adguard_container_name: "adguard-home"
+
+# Ports
+adguard_web_port: "3000"
+adguard_dns_port: "5353"
+
+# Directories
+adguard_data_dir: "/opt/adguard/data"
+adguard_config_dir: "/opt/adguard/config"
+
+# Traefik integration
+adguard_enable_traefik: true
+adguard_docker_network: "traefik"
+adguard_domain: "adguard.192.168.10.20.nip.io"
+
+# Admin credentials
+adguard_admin_user: "{{ adguard_admin_username | default('admin') }}"
+adguard_admin_password: "{{ adguard_admin_pass | default('changeme-please') }}"
+
+# DNS Configuration
+adguard_upstream_dns:
+  - "1.1.1.1"
+  - "8.8.8.8"
+
+# Essential blocklists for ad-blocking
+adguard_blocklists:
+  - name: "AdGuard DNS filter"
+    url: "https://adguardteam.github.io/AdGuardSDNSFilter/Filters/filter.txt"
+    enabled: true
+  - name: "EasyList"
+    url: "https://easylist.to/easylist/easylist.txt"
+    enabled: true
+
+# DNS Records (your homelab services)
+adguard_dns_records:
+  - domain: "adguard.{{ lookup('env', 'HOMELAB_DOMAIN') | default('example.com') }}"
+    ip: "192.168.10.20"
+  - domain: "traefik.{{ lookup('env', 'HOMELAB_DOMAIN') | default('example.com') }}"
+    ip: "192.168.10.20"
+  - domain: "homepage.{{ lookup('env', 'HOMELAB_DOMAIN') | default('example.com') }}"
+    ip: "192.168.10.20"
+  - domain: "jellyfin.{{ lookup('env', 'HOMELAB_DOMAIN') | default('example.com') }}"
+    ip: "192.168.10.20"
+  - domain: "nextcloud.{{ lookup('env', 'HOMELAB_DOMAIN') | default('example.com') }}"
+    ip: "192.168.10.20"

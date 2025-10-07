@@ -4,16 +4,40 @@ services:
     container_name: traefik
     restart: unless-stopped
     ports:
-      - "80:80"     # Web traffic
+      - "80:80"     # HTTP
+      - "443:443"   # HTTPS
       - "8080:8080" # Dashboard
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - "{{ traefik_data_dir }}:/data"
+{% if traefik_enable_ssl %}
+    environment:
+      - CLOUDFLARE_DNS_API_TOKEN={{ traefik_cloudflare_api_token }}
+{% endif %}
     command:
+      # API Configuration
       - "--api.dashboard=true"
       - "--api.insecure=true"
+      
+      # Provider Configuration
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
+      
+      # Entrypoints Configuration
       - "--entrypoints.web.address=:80"
+{% if traefik_enable_ssl %}
+      - "--entrypoints.websecure.address=:443"
+      
+      # Certificate Resolver Configuration
+      - "--certificatesresolvers.cloudflare.acme.dnschallenge=true"
+      - "--certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare"
+      - "--certificatesresolvers.cloudflare.acme.email={{ traefik_email }}"
+      - "--certificatesresolvers.cloudflare.acme.storage=/data/acme.json"
+      
+      # Global HTTP to HTTPS redirect
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+{% endif %}
     networks:
       - traefik
 

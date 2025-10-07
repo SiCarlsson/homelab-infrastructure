@@ -1,0 +1,29 @@
+bind_host: 0.0.0.0
+bind_port: 3000
+users: []
+dns:
+  bind_hosts:
+    - 0.0.0.0
+  port: 53
+  protection_enabled: true
+  filtering_enabled: true
+  upstream_dns:
+{% for dns in adguard_upstream_dns %}
+    - {{ dns }}
+{% endfor %}
+  bootstrap_dns:
+    - 1.1.1.1
+    - 8.8.8.8
+  rewrites:
+{% for record in adguard_dns_records %}
+    - domain: {{ record.domain }}
+      answer: {{ record.ip }}
+{% endfor %}
+filters:
+{% for filter in adguard_blocklists %}
+  - enabled: true
+    url: {{ filter.url }}
+    name: {{ filter.name }}
+    id: {{ loop.index }}
+{% endfor %}
+schema_version: 20

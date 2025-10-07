@@ -1,3 +1,13 @@
 ---
 # Traefik configuration
 traefik_version: "v3.0"
+
+# SSL/HTTPS Configuration
+traefik_enable_ssl: true
+traefik_domain: "{{ lookup('env', 'HOMELAB_DOMAIN') | default('example.com') }}"
+traefik_email: "{{ lookup('env', 'HOMELAB_EMAIL') | default('admin@example.com') }}" # For Let's Encrypt
+traefik_cloudflare_api_token: "{{ cloudflare_api_token | default('') }}"
+
+# Directories
+traefik_data_dir: "/opt/traefik/data"
+traefik_config_dir: "/opt/traefik/config"

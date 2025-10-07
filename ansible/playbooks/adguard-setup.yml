@@ -1,0 +1,32 @@
+---
+- name: Install and configure AdGuard Home on homelab VMs
+  hosts: all
+  become: yes
+  gather_facts: yes
+
+  roles:
+    - role: ../roles/adguard
+
+  post_tasks:
+    - name: Check AdGuard web interface connectivity
+      uri:
+        url: "http://{{ ansible_host }}:3000"
+        method: GET
+        timeout: 10
+      register: adguard_web_check
+      failed_when: false
+      changed_when: false
+
+    - name: Display setup completion
+      debug:
+        msg:
+          - "🎉 AdGuard Home setup completed successfully!"
+          - "🌐 Web interface: {% if adguard_enable_traefik %}http://{{ adguard_domain }}{% else %}http://{{ ansible_host }}:{{ adguard_web_port }}{% endif %}"
+          - "🔧 DNS server: {{ ansible_host }}:{{ adguard_dns_port }}"
+          - "📊 Pre-configured {{ adguard_dns_records | length }} custom DNS records"
+          - ""
+          - "📝 Next steps:"
+          - "  1. Open the web interface and create your admin account"
+          - "  2. Use credentials: {{ adguard_admin_user }} / {{ adguard_admin_password }}"
+          - "  3. Ad-blocking and custom DNS records are ready!"
+          - "  4. Configure your devices to use {{ ansible_host }}:{{ adguard_dns_port }} as DNS server"
