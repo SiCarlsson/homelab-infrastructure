@@ -1,34 +1,26 @@
 ---
-- name: Check if port 53 is in use by systemd-resolved
-  shell: "ss -tlnp | grep ':53 '"
-  register: port_53_check
-  failed_when: false
-  changed_when: false
-
-- name: Display port usage info
-  debug:
-    msg:
-      - "ℹ️  Port 53 status check completed"
-      - "📝 Note: AdGuard will use port {{ adguard_dns_port }} to avoid conflicts with systemd-resolved"
-
-- name: Configure systemd-resolved to forward sicar.se domains to AdGuard
-  blockinfile:
-    path: /etc/systemd/resolved.conf
-    block: |
-      # Forward sicar.se domains to local AdGuard
-      [Resolve]
-      DNS=127.0.0.1#{{ adguard_dns_port }}
-      Domains=~sicar.se
-    marker: "# {mark} ANSIBLE MANAGED BLOCK - AdGuard DNS forwarding"
-    backup: yes
-  become: yes
-  notify: restart systemd-resolved
-
-- name: Restart systemd-resolved to apply AdGuard forwarding
+- name: Stop and disable systemd-resolved to free port 53
   systemd:
     name: systemd-resolved
-    state: restarted
+    state: stopped
+    enabled: no
   become: yes
+
+- name: Create static resolv.conf for the VM
+  copy:
+    content: |
+      # Static DNS configuration - managed by Ansible
+      nameserver 1.1.1.1
+      nameserver 8.8.8.8
+    dest: /etc/resolv.conf
+    backup: yes
+  become: yes
+
+- name: Display port configuration info
+  debug:
+    msg:
+      - "✅ systemd-resolved disabled - port 53 is now available"
+      - "📝 AdGuard will use standard DNS port {{ adguard_dns_port }}"
 
 - name: Verify Docker is installed and running
   systemd:

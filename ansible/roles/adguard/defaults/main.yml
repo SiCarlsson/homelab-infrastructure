@@ -5,7 +5,7 @@ adguard_container_name: "adguard-home"
 
 # Ports
 adguard_web_port: "3000"
-adguard_dns_port: "5353"
+adguard_dns_port: "53"
 
 # Directories
 adguard_data_dir: "/opt/adguard/data"
@@ -14,7 +14,7 @@ adguard_config_dir: "/opt/adguard/config"
 # Traefik integration
 adguard_enable_traefik: true
 adguard_docker_network: "traefik"
-adguard_domain: "adguard.192.168.10.20.nip.io"
+adguard_domain: "adguard.{{ lookup('env', 'HOMELAB_DOMAIN') | default('sicar.se') }}"
 
 # Admin credentials
 adguard_admin_user: "{{ adguard_admin_username | default('admin') }}"
@@ -39,10 +39,4 @@ adguard_dns_records:
   - domain: "adguard.{{ lookup('env', 'HOMELAB_DOMAIN') | default('example.com') }}"
     ip: "192.168.10.20"
   - domain: "traefik.{{ lookup('env', 'HOMELAB_DOMAIN') | default('example.com') }}"
-    ip: "192.168.10.20"
-  - domain: "homepage.{{ lookup('env', 'HOMELAB_DOMAIN') | default('example.com') }}"
-    ip: "192.168.10.20"
-  - domain: "jellyfin.{{ lookup('env', 'HOMELAB_DOMAIN') | default('example.com') }}"
-    ip: "192.168.10.20"
-  - domain: "nextcloud.{{ lookup('env', 'HOMELAB_DOMAIN') | default('example.com') }}"
     ip: "192.168.10.20"
