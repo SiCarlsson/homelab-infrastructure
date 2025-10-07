@@ -8,16 +8,16 @@
 
   post_tasks:
     - name: Check Cloudflare DDNS container status
-      command: docker compose ps --format json
+      command: docker compose ps --services --filter status=running
       args:
         chdir: "{{ cloudflare_ddns_compose_dir }}"
-      register: ddns_container_status
+      register: ddns_running_services
       changed_when: false
 
     - name: Verify Cloudflare DDNS container is running
       assert:
         that:
-          - ddns_container_status.stdout | from_json | selectattr('State', 'equalto', 'running') | list | length > 0
+          - ddns_running_services.stdout_lines | length > 0
         fail_msg: "Cloudflare DDNS container is not running"
         success_msg: "Cloudflare DDNS container is running successfully"
 
