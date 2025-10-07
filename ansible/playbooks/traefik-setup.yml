@@ -2,14 +2,45 @@
 - name: Install Traefik (simple setup)
   hosts: local_docker_hosts
   become: yes
+  gather_facts: yes
 
   roles:
     - role: ../roles/traefik
 
   post_tasks:
-    - name: Show how to access Traefik
+    - name: Check Traefik container status
+      command: docker compose ps --format json
+      args:
+        chdir: /opt/traefik
+      register: traefik_container_status
+      changed_when: false
+
+    - name: Verify Traefik container is running
+      assert:
+        that:
+          - traefik_container_status.stdout | from_json | selectattr('State', 'equalto', 'running') | list | length > 0
+        fail_msg: "Traefik container is not running"
+        success_msg: "Traefik container is running successfully"
+
+    - name: Check Traefik dashboard connectivity
+      uri:
+        url: "http://{{ ansible_host }}:8080"
+        method: GET
+        timeout: 10
+      register: traefik_dashboard_check
+      failed_when: false
+      changed_when: false
+
+    - name: Display setup completion
       debug:
         msg:
-          - "🎉 Traefik is now running!"
-          - "📋 Dashboard: http://{{ ansible_host }}:8080"
+          - "🎉 Traefik setup completed successfully!"
+          - "� Dashboard: http://{{ ansible_host }}:8080 {% if traefik_dashboard_check.status == 200 %}✅ (accessible){% else %}❌ (check connection){% endif %}"
           - "🔧 Your apps will be available on port 80"
+          - "🌐 Traefik network created and ready for services"
+          - "{% if traefik_enable_ssl %}🔒 HTTPS enabled with Let's Encrypt + Cloudflare DNS{% else %}⚠️  HTTP only - no SSL configured{% endif %}"
+          - ""
+          - "📝 Next steps:"
+          - "  1. Add services to the traefik network"
+          - "  2. Configure traefik labels on your containers"
+          - "  3. Monitor dashboard for routing status"

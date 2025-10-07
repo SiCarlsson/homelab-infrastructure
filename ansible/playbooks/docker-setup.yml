@@ -29,6 +29,5 @@
     - name: Display success
       debug:
         msg:
-          - "✅ {{ docker_version.stdout }} installed successfully"
-          - "✅ {{ docker_compose_version.stdout }} installed successfully"
-          - "✅ Docker daemon is running and ready to use"
+          - "🎉 Docker setup completed!"
+          - "✅ {{ docker_version.stdout }}"

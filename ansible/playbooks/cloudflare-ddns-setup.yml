@@ -2,5 +2,42 @@
 - name: Deploy Cloudflare DDNS
   hosts: all
   become: yes
+  gather_facts: yes
   roles:
     - role: ../roles/cloudflare-ddns
+
+  post_tasks:
+    - name: Check Cloudflare DDNS container status
+      command: docker compose ps --format json
+      args:
+        chdir: "{{ cloudflare_ddns_compose_dir }}"
+      register: ddns_container_status
+      changed_when: false
+
+    - name: Verify Cloudflare DDNS container is running
+      assert:
+        that:
+          - ddns_container_status.stdout | from_json | selectattr('State', 'equalto', 'running') | list | length > 0
+        fail_msg: "Cloudflare DDNS container is not running"
+        success_msg: "Cloudflare DDNS container is running successfully"
+
+    - name: Check Cloudflare DDNS logs for recent activity
+      command: docker compose logs --tail=10 cloudflare-ddns
+      args:
+        chdir: "{{ cloudflare_ddns_compose_dir }}"
+      register: ddns_logs
+      changed_when: false
+      failed_when: false
+
+    - name: Display setup completion
+      debug:
+        msg:
+          - "🎉 Cloudflare DDNS setup completed successfully!"
+          - "🌐 Zone: {{ cloudflare_zone }}"
+          - "🔄 Container status: Running"
+          - "📋 Service will automatically update DNS records for this host"
+          - ""
+          - "📝 Next steps:"
+          - "  1. Monitor logs: docker compose logs -f cloudflare-ddns"
+          - "  2. Verify DNS records are being updated in Cloudflare dashboard"
+          - "  3. Check container status: docker compose ps"

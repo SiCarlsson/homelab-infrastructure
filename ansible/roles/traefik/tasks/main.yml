@@ -57,12 +57,3 @@
 - name: Wait a moment for Traefik to start
   pause:
     seconds: 5
-
-- name: Display setup completion message
-  debug:
-    msg: |
-      ✅ Traefik is running!
-      📊 Dashboard: http://{{ ansible_host }}:8080
-      {% if traefik_enable_ssl %}🔒 HTTPS enabled with Let's Encrypt + Cloudflare DNS
-      🌐 Domain: {{ traefik_domain }}
-      📧 Let's Encrypt email: {{ traefik_email }}{% else %}⚠️  HTTP only - no SSL configured{% endif %}
