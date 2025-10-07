@@ -1,10 +1,13 @@
 ---
+- name: Wait for any existing apt processes to finish
+  shell: while fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do sleep 1; done
+
 - name: Update apt cache
   apt:
     update_cache: yes
     cache_valid_time: 3600
 
-- name: Install prerequisite packages
+- name: Install required packages
   apt:
     name:
       - ca-certificates
@@ -13,48 +16,35 @@
       - lsb-release
     state: present
 
-- name: Install Docker using convenience script
-  shell: |
-    curl -fsSL https://get.docker.com -o get-docker.sh
-    sh get-docker.sh
-    rm get-docker.sh
-  args:
-    creates: /usr/bin/docker
+- name: Add Docker GPG key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
 
-- name: Reload systemd daemon after Docker installation
-  systemd:
-    daemon_reload: yes
+- name: Add Docker repository
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+    state: present
 
-- name: Wait for Docker service to be available and start it
-  shell: |
-    # Wait for systemd to recognize the service
-    for i in {1..10}; do
-      if systemctl list-unit-files | grep -q docker.service; then
-        systemctl enable docker
-        systemctl start docker
-        break
-      fi
-      sleep 2
-    done
-  register: docker_start_result
-  changed_when: false
+- name: Install Docker
+  apt:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+    state: present
+    update_cache: yes
 
-- name: Verify Docker service is running
+- name: Start and enable Docker service
   systemd:
     name: docker
     state: started
     enabled: yes
-
-- name: Ensure docker group exists
-  group:
-    name: docker
-    state: present
 
 - name: Add user to docker group
   user:
     name: "{{ ansible_user }}"
     groups: docker
     append: yes
-
-- name: Reset SSH connection to apply group membership
-  meta: reset_connection

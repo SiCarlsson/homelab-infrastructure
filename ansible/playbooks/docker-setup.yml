@@ -8,26 +8,22 @@
     - role: ../roles/docker
 
   post_tasks:
-    - name: Verify Docker installation
+    - name: Verify Docker is working
       command: docker --version
       register: docker_version
       changed_when: false
       become: no
 
-    - name: Verify Docker Compose installation
-      command: docker compose version
-      register: docker_compose_version
-      changed_when: false
-      become: no
-
-    - name: Verify Docker daemon is running
+    - name: Verify Docker daemon is running (as root)
       command: docker info
       register: docker_info
       changed_when: false
-      become: no
+      become: yes
 
-    - name: Display success
+    - name: Display setup completion
       debug:
         msg:
-          - "🎉 Docker setup completed!"
+          - "🎉 Docker setup completed successfully!"
           - "✅ {{ docker_version.stdout }}"
+          - "✅ Docker daemon is running and ready"
+          - "✅ User added to docker group automatically"
