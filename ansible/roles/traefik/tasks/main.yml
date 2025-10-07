@@ -30,10 +30,10 @@
 - name: Create traefik network
   shell: docker network create traefik || true
 
-- name: Create Proxmox routing configuration
+- name: Create dynamic routing configuration
   template:
-    src: proxmox.yml.j2
-    dest: "{{ traefik_config_dir }}/proxmox.yml"
+    src: routes.yml.j2
+    dest: "{{ traefik_config_dir }}/routes.yml"
     mode: "0644"
 
 - name: Create simple traefik docker-compose file
