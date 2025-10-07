@@ -1,4 +1,3 @@
----
 - name: Install Traefik (simple setup)
   hosts: local_docker_hosts
   become: yes
@@ -9,16 +8,16 @@
 
   post_tasks:
     - name: Check Traefik container status
-      command: docker compose ps --format json
+      command: docker compose ps --services --filter status=running
       args:
         chdir: /opt/traefik
-      register: traefik_container_status
+      register: traefik_running_services
       changed_when: false
 
     - name: Verify Traefik container is running
       assert:
         that:
-          - traefik_container_status.stdout | from_json | selectattr('State', 'equalto', 'running') | list | length > 0
+          - traefik_running_services.stdout_lines | length > 0
         fail_msg: "Traefik container is not running"
         success_msg: "Traefik container is running successfully"
 
@@ -35,7 +34,7 @@
       debug:
         msg:
           - "🎉 Traefik setup completed successfully!"
-          - "� Dashboard: http://{{ ansible_host }}:8080 {% if traefik_dashboard_check.status == 200 %}✅ (accessible){% else %}❌ (check connection){% endif %}"
+          - "📊 Dashboard: http://{{ ansible_host }}:8080 {% if traefik_dashboard_check.status == 200 %}✅ (accessible){% else %}❌ (check connection){% endif %}"
           - "🔧 Your apps will be available on port 80"
           - "🌐 Traefik network created and ready for services"
           - "{% if traefik_enable_ssl %}🔒 HTTPS enabled with Let's Encrypt + Cloudflare DNS{% else %}⚠️  HTTP only - no SSL configured{% endif %}"
