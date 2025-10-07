@@ -1,10 +1,8 @@
 Homepage
 
-AdGuard
-
 Logseq
 
-Vaultwarden
+bitWarden
 
 Portainer
 
@@ -16,8 +14,6 @@ Loki?
 
 Gitea/Gitlab/Jenkins
 
-Home Assistant?
-
 Nextcloud?
 
 PostgreSQL servers
@@ -25,3 +21,4 @@ PostgreSQL servers
 ChangeDetection
 
 Nginx (webserver)
+

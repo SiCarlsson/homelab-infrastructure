@@ -14,7 +14,7 @@ adguard_config_dir: "/opt/adguard/config"
 # Traefik integration
 adguard_enable_traefik: true
 adguard_docker_network: "traefik"
-adguard_domain: "adguard.{{ lookup('env', 'HOMELAB_DOMAIN') | default('sicar.se') }}"
+adguard_domain: "adguard.{{ lookup('env', 'HOMELAB_DOMAIN') | default('example.com') }}"
 
 # Admin credentials
 adguard_admin_user: "{{ adguard_admin_username | default('admin') }}"
@@ -34,9 +34,11 @@ adguard_blocklists:
     url: "https://easylist.to/easylist/easylist.txt"
     enabled: true
 
-# DNS Records (your homelab services)
+# DNS Records
 adguard_dns_records:
   - domain: "adguard.{{ lookup('env', 'HOMELAB_DOMAIN') | default('example.com') }}"
     ip: "192.168.10.20"
   - domain: "traefik.{{ lookup('env', 'HOMELAB_DOMAIN') | default('example.com') }}"
+    ip: "192.168.10.20"
+  - domain: "proxmox.{{ lookup('env', 'HOMELAB_DOMAIN') | default('example.com') }}"
     ip: "192.168.10.20"

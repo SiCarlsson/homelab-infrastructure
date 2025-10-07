@@ -28,7 +28,6 @@ quick-ansible:
 	$(MAKE) ansible-install-adguard
 
 quick-up-all:
-	$(MAKE) quick-init
 	$(MAKE) quick-terraform
 	@echo "⏳ Waiting 30 seconds for VMs to fully boot up..."
 	sleep 30
@@ -100,6 +99,5 @@ ansible-install-cloudflare-ddns:
 
 ansible-install-adguard:
 	ansible-playbook -i ansible/inventory/hosts.yml ansible/playbooks/adguard-setup.yml \
-		$(if $(ADGUARD_DNS_RECORDS),-e adguard_dns_records="$(ADGUARD_DNS_RECORDS)",) \
 		$(if $(ADGUARD_ADMIN_USER),-e adguard_admin_username="$(ADGUARD_ADMIN_USER)",) \
 		$(if $(ADGUARD_ADMIN_PASSWORD),-e adguard_admin_pass="$(ADGUARD_ADMIN_PASSWORD)",)

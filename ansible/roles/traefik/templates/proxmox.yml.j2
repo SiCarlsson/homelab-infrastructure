@@ -1,0 +1,41 @@
+http:
+  routers:
+    proxmox:
+      rule: "Host(`proxmox.{{ lookup('env', 'HOMELAB_DOMAIN') | default('example.com') }}`)"
+      service: proxmox-service
+{% if traefik_enable_ssl %}
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: cloudflare
+{% else %}
+      entryPoints:
+        - web
+{% endif %}
+    traefik:
+      rule: "Host(`traefik.{{ lookup('env', 'HOMELAB_DOMAIN') | default('example.com') }}`)"
+      service: traefik-service
+{% if traefik_enable_ssl %}
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: cloudflare
+{% else %}
+      entryPoints:
+        - web
+{% endif %}
+
+  services:
+    traefik-service:
+      loadBalancer:
+        servers:
+          - url: "http://192.168.10.20:8080"
+    proxmox-service:
+      loadBalancer:
+        servers:
+          - url: "https://{{ lookup('env', 'PROXMOX_HOST_IP') | default('192.168.10.10') }}:8006"
+        serversTransport: "proxmox-transport"
+
+  serversTransports:
+    proxmox-transport:
+      insecureSkipVerify: true
