@@ -1,4 +1,3 @@
----
 # AdGuard Home configuration - Simple ad-blocking & DNS records
 adguard_version: "latest"
 adguard_container_name: "adguard-home"

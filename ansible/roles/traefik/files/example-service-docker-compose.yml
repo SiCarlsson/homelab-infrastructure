@@ -1,5 +1,4 @@
 # Simple example: How to add a web app behind Traefik
-# Save this as docker-compose.yml in any folder and run: docker compose up
 
 version: "3.8"
 
@@ -16,6 +15,7 @@ services:
 networks:
   traefik:
     external: true
+    
 # To test:
 # 1. Add "192.168.10.20 whoami.local" to your /etc/hosts file
 # 2. Visit http://whoami.local in your browser

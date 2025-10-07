@@ -1,5 +1,4 @@
 ---
-# Simple Traefik installation
 - name: Ensure Docker service is running
   systemd:
     name: docker
