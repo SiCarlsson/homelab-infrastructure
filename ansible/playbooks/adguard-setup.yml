@@ -8,15 +8,6 @@
     - role: ../roles/adguard
 
   post_tasks:
-    - name: Check AdGuard web interface connectivity
-      uri:
-        url: "http://adguard{{ ansible_host }}"
-        method: GET
-        timeout: 10
-      register: adguard_web_check
-      failed_when: false
-      changed_when: false
-
     - name: Display setup completion
       debug:
         msg:
