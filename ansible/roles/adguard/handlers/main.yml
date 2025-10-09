@@ -2,4 +2,5 @@
 - name: restart adguard
   shell: |
     cd /opt/adguard
-    docker compose restart
+    docker compose down
+    docker compose up -d
