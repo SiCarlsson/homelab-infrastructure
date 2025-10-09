@@ -15,6 +15,21 @@ http:
         - web
 {% endif %}
 
+    traefik-dashboard:
+      rule: "Host(`traefik.{{ lookup('env', 'HOMELAB_DOMAIN') | default('example.com') }}`)"
+      service: api@internal
+{% if traefik_enable_ssl %}
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: cloudflare
+        domains:
+          - main: "*.{{ lookup('env', 'HOMELAB_DOMAIN') | default('example.com') }}"
+{% else %}
+      entryPoints:
+        - web
+{% endif %}
+
   services:
     proxmox-service:
       loadBalancer:
