@@ -6,7 +6,6 @@ services:
     ports:
       - "80:80"     # HTTP
       - "443:443"   # HTTPS
-      - "8080:8080" # Dashboard
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - "{{ traefik_data_dir }}:/data"
@@ -15,14 +14,26 @@ services:
     environment:
       - CLOUDFLARE_DNS_API_TOKEN={{ traefik_cloudflare_api_token }}
 {% endif %}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dashboard.rule=Host(`traefik.{{ lookup('env', 'HOMELAB_DOMAIN') | default('example.com') }}`)"
+      - "traefik.http.routers.dashboard.entrypoints=websecure"
+      - "traefik.http.routers.dashboard.tls.certresolver=cloudflare"
+      - "traefik.http.routers.dashboard.tls.domains[0].main=*.{{ lookup('env', 'HOMELAB_DOMAIN') | default('example.com') }}"
+      - "traefik.http.routers.dashboard.service=api@internal"
     command:
       # API Configuration
       - "--api.dashboard=true"
-      - "--api.insecure=true"
+      - "--api.insecure=false"
+      
+      # Logging
+      - "--log.level=INFO"
+      - "--accesslog=true"
       
       # Provider Configuration
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.network=traefik"
       - "--providers.file.directory=/config"
       - "--providers.file.watch=true"
       
@@ -36,8 +47,9 @@ services:
       - "--certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare"
       - "--certificatesresolvers.cloudflare.acme.email={{ traefik_email }}"
       - "--certificatesresolvers.cloudflare.acme.storage=/data/acme.json"
+      - "--certificatesresolvers.cloudflare.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
       
-      # Global HTTP to HTTPS redirect
+      # HTTP to HTTPS redirect
       - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
       - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
 {% endif %}

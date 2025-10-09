@@ -11,3 +11,8 @@ traefik_cloudflare_api_token: "{{ cloudflare_api_token | default('') }}"
 # Directories
 traefik_data_dir: "/opt/traefik/data"
 traefik_config_dir: "/opt/traefik/config"
+
+# Dashboard Security (optional)
+traefik_dashboard_auth_enabled: false
+traefik_dashboard_username: "{{ lookup('env', 'TRAEFIK_DASHBOARD_USERNAME') | default('admin') }}"
+traefik_dashboard_password: "{{ lookup('env', 'TRAEFIK_DASHBOARD_PASSWORD') | default('changeme') }}"

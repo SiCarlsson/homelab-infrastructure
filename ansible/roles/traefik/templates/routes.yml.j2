@@ -8,29 +8,14 @@ http:
         - websecure
       tls:
         certResolver: cloudflare
-{% else %}
-      entryPoints:
-        - web
-{% endif %}
-    traefik:
-      rule: "Host(`traefik.{{ lookup('env', 'HOMELAB_DOMAIN') | default('example.com') }}`)"
-      service: traefik-service
-{% if traefik_enable_ssl %}
-      entryPoints:
-        - websecure
-      tls:
-        certResolver: cloudflare
+        domains:
+          - main: "*.{{ lookup('env', 'HOMELAB_DOMAIN') | default('example.com') }}"
 {% else %}
       entryPoints:
         - web
 {% endif %}
 
   services:
-    traefik-service:
-      loadBalancer:
-        servers:
-          - url: "https://{{ lookup('env', 'LOCAL_STARTING_IP_ADDRESS') | default('192.168.10.20') }}:8080"
-
     proxmox-service:
       loadBalancer:
         servers:
