@@ -26,6 +26,7 @@ quick-ansible:
 	$(MAKE) ansible-install-traefik
 	$(MAKE) ansible-install-cloudflare-ddns
 	$(MAKE) ansible-install-adguard
+	$(MAKE) ansible-install-homepage
 
 quick-up-all:
 	$(MAKE) quick-terraform
@@ -101,3 +102,6 @@ ansible-install-adguard:
 	ansible-playbook -i ansible/inventory/hosts.yml ansible/playbooks/adguard-setup.yml \
 		$(if $(ADGUARD_ADMIN_USER),-e adguard_admin_username="$(ADGUARD_ADMIN_USER)",) \
 		$(if $(ADGUARD_ADMIN_PASSWORD),-e adguard_admin_pass="$(ADGUARD_ADMIN_PASSWORD)",)
+
+ansible-install-homepage:
+	ansible-playbook -i ansible/inventory/hosts.yml ansible/playbooks/homepage-setup.yml

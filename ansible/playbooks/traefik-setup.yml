@@ -23,7 +23,7 @@
 
     - name: Check Traefik dashboard connectivity
       uri:
-        url: "http://{{ ansible_host }}:8080"
+        url: "http://traefik.{{ ansible_host }}"
         method: GET
         timeout: 10
       register: traefik_dashboard_check
@@ -34,7 +34,7 @@
       debug:
         msg:
           - "🎉 Traefik setup completed successfully!"
-          - "📊 Dashboard: http://{{ ansible_host }}:8080 {% if traefik_dashboard_check.status == 200 %}✅ (accessible){% else %}❌ (check connection){% endif %}"
+          - "📊 Dashboard: http://traefik.{{ ansible_host }}:8080 {% if traefik_dashboard_check.status == 200 %}✅ (accessible){% else %}❌ (check connection){% endif %}"
           - "🔧 Your apps will be available on port 80"
           - "🌐 Traefik network created and ready for services"
           - "{% if traefik_enable_ssl %}🔒 HTTPS enabled with Let's Encrypt + Cloudflare DNS{% else %}⚠️  HTTP only - no SSL configured{% endif %}"

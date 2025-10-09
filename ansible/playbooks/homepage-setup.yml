@@ -1,0 +1,24 @@
+---
+- name: Install Homepage
+  hosts: local_docker_hosts
+  become: yes
+  gather_facts: yes
+
+  roles:
+    - role: ../roles/homepage
+
+  post_tasks:
+    - name: Check Homepage web interface connectivity
+      uri:
+        url: "https://homepage.{{ homepage_domain }}"
+        method: GET
+        timeout: 10
+      register: homepage_web_check
+      failed_when: false
+      changed_when: false
+
+    - name: Display setup completion
+      debug:
+        msg:
+          - "🎉 Homepage setup completed successfully!"
+          - "🏠 Dashboard: https://homepage.{{ homepage_domain }} {% if homepage_web_check.status == 200 %}✅ (accessible){% else %}❌ (check connection){% endif %}"

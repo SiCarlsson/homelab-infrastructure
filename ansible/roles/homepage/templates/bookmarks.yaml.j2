@@ -1,0 +1,16 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/configs/bookmarks
+
+{% for bookmark_group in homepage_bookmarks %}
+- {{ bookmark_group.name }}:
+{% for bookmark in bookmark_group.bookmarks %}
+    - {{ bookmark.name }}:
+        - abbr: {{ bookmark.abbr }}
+          href: {{ bookmark.href }}
+{% if bookmark.icon is defined %}
+          icon: {{ bookmark.icon }}
+{% endif %}
+{% endfor %}
+
+{% endfor %}

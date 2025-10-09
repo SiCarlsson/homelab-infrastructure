@@ -1,0 +1,33 @@
+---
+title: "{{ homepage_title | default('My Homelab Dashboard') }}"
+favicon: "{{ homepage_favicon | default('https://gethomepage.dev/img/favicon.ico') }}"
+
+theme: "{{ homepage_theme | default('dark') }}"
+color: "{{ homepage_color | default('slate') }}"
+headerStyle: "{{ homepage_header_style | default('clean') }}"
+
+background:
+  image: "{{ homepage_background_image | default('') }}"
+  blur: "{{ homepage_background_blur | default('') }}"
+  saturate: "{{ homepage_background_saturate | default('') }}"
+  brightness: "{{ homepage_background_brightness | default('') }}"
+  opacity: "{{ homepage_background_opacity | default('') }}"
+
+cardBlur: "{{ homepage_card_blur | default('') }}"
+
+language: "{{ homepage_language | default('en') }}"
+
+hideVersion: {{ homepage_hide_version | default('false') }}
+
+layout:
+{% for layout_name, layout_config in homepage_layout.items() %}
+  {{ layout_name }}:
+    style: {{ layout_config.style | default('row') }}
+    columns: {{ layout_config.columns | default(3) }}
+{% endfor %}
+
+providers:
+  longhorn:
+    url: "{{ homepage_longhorn_url | default('') }}"
+  unifi:
+    url: "{{ homepage_unifi_url | default('') }}"

@@ -1,0 +1,43 @@
+---
+- name: Create homepage config directory
+  file:
+    path: "{{ homepage_config_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Create homepage settings configuration
+  template:
+    src: settings.yaml.j2
+    dest: "{{ homepage_config_dir }}/settings.yaml"
+    mode: "0644"
+  notify: restart homepage
+
+- name: Create homepage services configuration
+  template:
+    src: services.yaml.j2
+    dest: "{{ homepage_config_dir }}/services.yaml"
+    mode: "0644"
+  notify: restart homepage
+
+- name: Create homepage widgets configuration
+  template:
+    src: widgets.yaml.j2
+    dest: "{{ homepage_config_dir }}/widgets.yaml"
+    mode: "0644"
+  notify: restart homepage
+
+- name: Create homepage bookmarks configuration
+  template:
+    src: bookmarks.yaml.j2
+    dest: "{{ homepage_config_dir }}/bookmarks.yaml"
+    mode: "0644"
+  notify: restart homepage
+
+- name: Create homepage docker-compose file
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ homepage_install_dir }}/docker-compose.yml"
+    mode: "0644"
+
+- name: Start homepage
+  shell: cd {{ homepage_install_dir }} && docker compose up -d

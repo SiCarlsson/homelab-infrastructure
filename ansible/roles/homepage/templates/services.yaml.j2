@@ -1,0 +1,30 @@
+---
+{% for service_group in homepage_services %}
+- {{ service_group.name }}:
+{% for service in service_group.services %}
+  - {{ service.name }}:
+      href: {{ service.href }}
+{% if service.icon is defined %}
+      icon: {{ service.icon }}
+{% endif %}
+{% if service.description is defined %}
+      description: {{ service.description }}
+{% endif %}
+{% if service.server is defined %}
+      server: {{ service.server }}
+{% endif %}
+{% if service.container is defined %}
+      container: {{ service.container }}
+{% endif %}
+{% if service.widget is defined %}
+      widget:
+        type: {{ service.widget.type }}
+{% for key, value in service.widget.items() %}
+{% if key != 'type' %}
+        {{ key }}: {{ value }}
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endfor %}
+
+{% endfor %}

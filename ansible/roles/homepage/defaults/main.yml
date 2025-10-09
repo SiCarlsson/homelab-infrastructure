@@ -1,0 +1,95 @@
+---
+# Homepage configuration - lean Traefik setup
+homepage_version: "latest"
+homepage_domain: "{{ lookup('env', 'HOMELAB_DOMAIN') | default('example.com') }}"
+
+# Directories
+homepage_install_dir: "/opt/homepage"
+homepage_config_dir: "/opt/homepage/config"
+
+# Appearance settings
+homepage_title: "My Homelab Dashboard"
+homepage_theme: "dark"                    # dark, light
+homepage_color: "slate"                   # slate, gray, zinc, neutral, stone, red, orange, amber, yellow, lime, green, emerald, teal, cyan, sky, blue, indigo, violet, purple, fuchsia, pink, rose
+homepage_header_style: "clean"            # clean, boxed
+homepage_language: "en"
+homepage_hide_version: false
+
+# Background (optional)
+homepage_background_image: ""
+homepage_background_blur: ""
+homepage_background_saturate: ""
+homepage_background_brightness: ""
+homepage_background_opacity: ""
+homepage_card_blur: ""
+
+# Layout configuration
+homepage_layout:
+  Information:
+    style: row
+    columns: 3
+  Services:
+    style: row
+    columns: 3
+
+# Widgets configuration - system info widgets
+homepage_widgets:
+  - type: "datetime"
+    locale: "en"
+    format:
+      dateStyle: "long"
+      timeStyle: "short"
+      hour12: false
+  - type: "search"
+    provider: "duckduckgo"
+    target: "_blank"
+
+# Services configuration - customize your services here
+homepage_services:
+  - name: "Column1"
+    services:
+      - name: "Traefik"
+        href: "https://traefik.{{ homepage_domain }}"
+        icon: "traefik"
+        description: "Reverse Proxy & SSL"
+        container: "traefik"
+        widget:
+          type: "traefik"
+          url: "https://traefik.{{ homepage_domain }}"
+  - name: "Column2"
+    services:
+      - name: "AdGuard Home"
+        href: "https://adguard.{{ homepage_domain }}"
+        icon: "adguard-home"
+        description: "DNS Ad Blocker"
+        container: "adguard-home"
+        widget:
+          type: "adguard"
+          url: "https://adguard.{{ homepage_domain }}"
+
+# Bookmarks configuration - quick links
+homepage_bookmarks:
+  - name: "Developer"
+    bookmarks:
+      - name: "Github"
+        abbr: "GH"
+        href: "https://github.com/"
+      - name: "Stack Overflow"
+        abbr: "SO"
+        href: "https://stackoverflow.com/"
+  - name: "Social"
+    bookmarks:
+      - name: "Reddit"
+        abbr: "RE"
+        href: "https://reddit.com/"
+      - name: "Twitter"
+        abbr: "TW"
+        href: "https://twitter.com/"
+  - name: "Entertainment"
+    bookmarks:
+      - name: "YouTube"
+        abbr: "YT"
+        href: "https://youtube.com/"
+      - name: "Netflix"
+        abbr: "NF"
+        href: "https://netflix.com/"

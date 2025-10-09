@@ -1,0 +1,7 @@
+---
+- name: restart homepage
+  shell: |
+    cd {{ homepage_install_dir }}
+    docker compose down
+    docker compose up -d
+  listen: "restart homepage"

@@ -1,0 +1,10 @@
+---
+{% for widget in homepage_widgets %}
+- {{ widget.type }}:
+{% for key, value in widget.items() %}
+{% if key != 'type' %}
+    {{ key }}: {{ value }}
+{% endif %}
+{% endfor %}
+
+{% endfor %}

@@ -1,0 +1,27 @@
+services:
+  homepage:
+    image: ghcr.io/gethomepage/homepage:{{ homepage_version }}
+    container_name: homepage
+    restart: unless-stopped
+    volumes:
+      - "{{ homepage_config_dir }}:/app/config"
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - HOMEPAGE_VAR_TITLE=Homelab Dashboard
+      - HOMEPAGE_VAR_SEARCH_PROVIDER=google
+      - HOMEPAGE_VAR_HEADER_STYLE=clean
+      - HOMEPAGE_VAR_WEATHER_UNIT=metric
+      - HOMEPAGE_ALLOWED_HOSTS=homepage.{{ homepage_domain }}
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.homepage.rule=Host(`homepage.{{ homepage_domain }}`)
+      - traefik.http.routers.homepage.entrypoints=websecure
+      - traefik.http.routers.homepage.tls.certresolver=cloudflare
+      - traefik.http.routers.homepage.tls.domains[0].main=*.{{ homepage_domain }}
+      - traefik.http.services.homepage.loadbalancer.server.port=3000
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true
