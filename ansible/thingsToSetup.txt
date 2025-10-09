@@ -22,3 +22,4 @@ ChangeDetection
 
 Nginx (webserver)
 
+n8n
