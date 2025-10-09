@@ -12,3 +12,7 @@ cloudflare_ddns_proxied: "false"
 
 # Update interval in seconds
 cloudflare_ddns_interval: "300"
+
+# Cloudflare credentials from environment
+cloudflare_api_token: "{{ lookup('env', 'CLOUDFLARE_API_TOKEN') | default('') }}"
+cloudflare_zone: "{{ lookup('env', 'CLOUDFLARE_ZONE') | default('') }}"

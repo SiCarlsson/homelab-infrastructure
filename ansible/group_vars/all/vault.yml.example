@@ -1,9 +1,0 @@
-# Cloudflare DDNS Secrets
-# This file is encrypted with ansible-vault
-# To edit: ansible-vault edit ansible/group_vars/all/vault.yml
-# To encrypt: ansible-vault encrypt ansible/group_vars/all/vault.yml
-
----
-vault_cloudflare_api_token: "your-actual-cloudflare-api-token"
-vault_cloudflare_zone: "yourdomain.com"
-vault_cloudflare_subdomain: "home"  # optional
