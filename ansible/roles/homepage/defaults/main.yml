@@ -1,17 +1,18 @@
 ---
 # Homepage configuration - lean Traefik setup
 homepage_version: "latest"
-homepage_domain: "homepage.{{ lookup('env', 'HOMELAB_DOMAIN') | default('example.com') }}"
+default_domain: "{{ lookup('env', 'HOMELAB_DOMAIN') | default('example.com') }}"
+homepage_domain: "homepage.{{ default_domain }}"
 
 # Directories
 homepage_install_dir: "/opt/homepage"
 homepage_config_dir: "/opt/homepage/config"
 
 # Appearance settings
-homepage_title: "My Homelab Dashboard"
-homepage_theme: "dark" # dark, light
-homepage_color: "slate" # slate, gray, zinc, neutral, stone, red, orange, amber, yellow, lime, green, emerald, teal, cyan, sky, blue, indigo, violet, purple, fuchsia, pink, rose
-homepage_header_style: "clean" # clean, boxed
+homepage_title: "Homelab Dashboard"
+homepage_theme: "dark"
+homepage_color: "slate"
+homepage_header_style: "clean"
 homepage_language: "en"
 homepage_hide_version: false
 
@@ -58,71 +59,71 @@ homepage_services:
   - name: "Infrastructure"
     services:
       - name: "Traefik"
-        href: "https://traefik.{{ homepage_domain }}"
+        href: "https://traefik.{{ default_domain }}"
         icon: "traefik"
         description: "Reverse Proxy & SSL"
         container: "traefik"
         widget:
           type: "traefik"
-          url: "https://traefik.{{ homepage_domain }}"
+          url: "https://traefik.{{ default_domain }}"
       - name: "AdGuard Home"
-        href: "https://adguard.{{ homepage_domain }}"
+        href: "https://adguard.{{ default_domain }}"
         icon: "adguard-home"
         description: "DNS Ad Blocker"
         container: "adguard-home"
         widget:
           type: "adguard"
-          url: "https://adguard.{{ homepage_domain }}"
+          url: "https://adguard.{{ default_domain }}"
       - name: "Portainer"
-        href: "https://portainer.{{ homepage_domain }}"
+        href: "https://portainer.{{ default_domain }}"
         icon: "portainer"
         description: "Container Management"
 
   - name: "Monitoring"
     services:
       - name: "Grafana"
-        href: "https://grafana.{{ homepage_domain }}"
+        href: "https://grafana.{{ default_domain }}"
         icon: "grafana"
         description: "Metrics Visualization"
       - name: "Prometheus"
-        href: "https://prometheus.{{ homepage_domain }}"
+        href: "https://prometheus.{{ default_domain }}"
         icon: "prometheus"
         description: "Metrics Collection"
       - name: "Uptime Kuma"
-        href: "https://uptime.{{ homepage_domain }}"
+        href: "https://uptime.{{ default_domain }}"
         icon: "uptime-kuma"
         description: "Service Monitoring"
 
   - name: "Development"
     services:
       - name: "n8n"
-        href: "https://n8n.{{ homepage_domain }}"
+        href: "https://n8n.{{ default_domain }}"
         icon: "n8n"
         description: "Workflow Automation"
 
   - name: "Productivity"
     services:
       - name: "Bitwarden"
-        href: "https://vault.{{ homepage_domain }}"
+        href: "https://vault.{{ default_domain }}"
         icon: "bitwarden"
         description: "Password Manager"
       - name: "Logseq"
-        href: "https://notes.{{ homepage_domain }}"
+        href: "https://notes.{{ default_domain }}"
         icon: "logseq"
         description: "Knowledge Management"
 
   - name: "Utilities"
     services:
       - name: "ChangeDetection"
-        href: "https://changedetection.{{ homepage_domain }}"
-        icon: "changedetection-io"
+        href: "https://change.{{ default_domain }}"
+        icon: "changedetection"
         description: "Website Change Monitoring"
       - name: "Nginx"
-        href: "https://nginx.{{ homepage_domain }}"
+        href: "https://nginx.{{ default_domain }}"
         icon: "nginx"
         description: "Web Server"
       - name: "PostgreSQL Admin"
-        href: "https://pgadmin.{{ homepage_domain }}"
+        href: "https://pgadmin.{{ default_domain }}"
         icon: "postgresql"
         description: "Database Administration"
 
