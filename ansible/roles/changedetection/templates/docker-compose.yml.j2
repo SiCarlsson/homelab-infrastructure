@@ -1,0 +1,44 @@
+services:
+  changedetection:
+    image: {{ changedetection_image }}
+    container_name: changedetection
+    hostname: changedetection
+    restart: unless-stopped
+    volumes:
+      - {{ changedetection_data_dir }}:/datastore
+    environment:
+{% for key, value in changedetection_env.items() %}
+      - {{ key }}={{ value }}
+{% endfor %}
+    networks:
+      - {{ traefik_network }}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.changedetection.rule=Host(`{{ changedetection_domain }}`)"
+      - "traefik.http.routers.changedetection.entrypoints=websecure"
+      - "traefik.http.routers.changedetection.tls.certresolver=cloudflare"
+      - "traefik.http.routers.changedetection.tls.domains[0].main=*.{{ lookup('env', 'HOMELAB_DOMAIN') | default('example.com') }}"
+      - "traefik.http.services.changedetection.loadbalancer.server.port=5000"
+
+  playwright-chrome:
+    image: browserless/chrome:latest
+    container_name: changedetection-playwright
+    hostname: playwright-chrome
+    restart: unless-stopped
+    environment:
+      SCREEN_WIDTH: 1920
+      SCREEN_HEIGHT: 1024
+      SCREEN_DEPTH: 16
+      ENABLE_DEBUGGER: "false"
+      PREBOOT_CHROME: "true"
+      CONNECTION_TIMEOUT: 300000
+      MAX_CONCURRENT_SESSIONS: 10
+      CHROME_REFRESH_TIME: 600000
+      DEFAULT_BLOCK_ADS: "true"
+      DEFAULT_STEALTH: "true"
+    networks:
+      - {{ traefik_network }}
+
+networks:
+  {{ traefik_network }}:
+    external: true

@@ -1,0 +1,25 @@
+---
+- name: Create ChangeDetection directory structure
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+    - "{{ changedetection_base_dir }}"
+    - "{{ changedetection_data_dir }}"
+
+- name: Create ChangeDetection docker-compose file
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ changedetection_base_dir }}/docker-compose.yml"
+    mode: '0644'
+  notify: Restart ChangeDetection
+
+- name: Start ChangeDetection services
+  shell: |
+    cd {{ changedetection_base_dir }}
+    docker compose up -d
+
+- name: Wait for ChangeDetection to start
+  pause:
+    seconds: 5

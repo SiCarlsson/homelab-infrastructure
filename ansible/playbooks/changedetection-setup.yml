@@ -1,0 +1,14 @@
+---
+- name: Install and configure ChangeDetection
+  hosts: local_docker_hosts
+  become: true
+
+  roles:
+    - role: ../roles/changedetection
+  
+  post_tasks:
+    - name: Display setup completion
+      debug:
+        msg:
+          - "🎉 ChangeDetection setup completed successfully!"
+          - "🌐 Web interface: {% if changedetection_enable_traefik %}http://{{ changedetection_domain }}{% else %}http://localhost:5000{% endif %}"

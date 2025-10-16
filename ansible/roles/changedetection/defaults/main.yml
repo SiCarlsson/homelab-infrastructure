@@ -1,0 +1,17 @@
+# Change Detection default variables
+
+changedetection_image: "ghcr.io/dgtlmoon/changedetection.io:latest"
+
+changedetection_base_dir: "/opt/changedetection"
+changedetection_data_dir: "{{ changedetection_base_dir }}/datastore"
+
+changedetection_domain: "change.{{ lookup('env', 'HOMELAB_DOMAIN') | default('example.com') }}"
+
+changedetection_enable_traefik: true
+traefik_network: "traefik"
+
+# Environment variables
+changedetection_env:
+  PLAYWRIGHT_DRIVER_URL: "ws://playwright-chrome:3000/?stealth=1&--disable-web-security=true"
+  BASE_URL: "http://{{ changedetection_domain }}"
+  HIDE_REFERER: "true"

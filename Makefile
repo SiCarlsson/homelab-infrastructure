@@ -27,6 +27,7 @@ quick-ansible:
 	$(MAKE) ansible-install-cloudflare-ddns
 	$(MAKE) ansible-install-adguard
 	$(MAKE) ansible-install-homepage
+	$(MAKE) ansible-install-changedetection
 
 quick-up-all:
 	$(MAKE) quick-terraform
@@ -105,3 +106,6 @@ ansible-install-adguard:
 
 ansible-install-homepage:
 	ansible-playbook -i ansible/inventory/hosts.yml ansible/playbooks/homepage-setup.yml
+
+ansible-install-changedetection:
+	ansible-playbook -i ansible/inventory/hosts.yml ansible/playbooks/changedetection-setup.yml
