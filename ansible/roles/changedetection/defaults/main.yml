@@ -15,3 +15,4 @@ changedetection_env:
   PLAYWRIGHT_DRIVER_URL: "ws://playwright-chrome:3000/?stealth=1&--disable-web-security=true"
   BASE_URL: "http://{{ changedetection_domain }}"
   HIDE_REFERER: "true"
+  USE_X_SETTINGS: "1"
