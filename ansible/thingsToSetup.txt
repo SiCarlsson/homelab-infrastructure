@@ -21,3 +21,7 @@ ChangeDetection
 Nginx (webserver)
 
 n8n
+
+Authentik
+
+Streamlit
