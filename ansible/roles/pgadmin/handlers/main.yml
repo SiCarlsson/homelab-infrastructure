@@ -1,0 +1,5 @@
+---
+- name: restart pgadmin
+  shell: |
+    cd /opt/pgadmin
+    docker compose restart

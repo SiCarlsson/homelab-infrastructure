@@ -1,0 +1,21 @@
+---
+# pgAdmin configuration
+pgadmin_version: "latest"
+
+# Directories
+pgadmin_data_dir: "/opt/pgadmin/data"
+pgadmin_config_dir: "/opt/pgadmin/config"
+
+# Login credentials
+pgadmin_email: "{{ lookup('env', 'PGADMIN_EMAIL') | default('admin@example.com') }}"
+pgadmin_password: "{{ lookup('env', 'PGADMIN_PASSWORD') | default('changeme123') }}"
+
+# Domain configuration for Traefik integration
+pgadmin_domain: "pgadmin.{{ lookup('env', 'HOMELAB_DOMAIN') | default('example.com') }}"
+pgadmin_traefik_network: "traefik"
+
+# PostgreSQL server configuration
+postgresql_host_ip: "{{ lookup('env', 'POSTGRES_HOST_IP') }}"
+postgresql_port: "5432"
+postgresql_username: "postgres"
+postgresql_maintenance_db: "postgres"

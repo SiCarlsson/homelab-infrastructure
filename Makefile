@@ -30,6 +30,7 @@ quick-ansible:
 	$(MAKE) ansible-install-changedetection
 	$(MAKE) ansible-install-portainer
 	$(MAKE) ansible-install-postgresql
+	$(MAKE) ansible-install-pgadmin
 
 quick-up-all:
 	$(MAKE) quick-terraform
@@ -119,4 +120,10 @@ ansible-install-postgresql:
 	ansible-playbook -i ansible/inventory/hosts.yml ansible/playbooks/postgresql-setup.yml \
 		$(if $(POSTGRES_PASSWORD),-e postgresql_superuser_password="$(POSTGRES_PASSWORD)",) \
 		$(if $(POSTGRES_USER_PASSWORD),-e postgresql_default_password="$(POSTGRES_USER_PASSWORD)",)
+
+ansible-install-pgadmin:
+	ansible-playbook -i ansible/inventory/hosts.yml ansible/playbooks/pgadmin-setup.yml \
+		$(if $(PGADMIN_EMAIL),-e pgadmin_email="$(PGADMIN_EMAIL)",) \
+		$(if $(PGADMIN_PASSWORD),-e pgadmin_password="$(PGADMIN_PASSWORD)",) \
+		$(if $(POSTGRES_HOST),-e postgresql_host="$(POSTGRES_HOST)",)
 

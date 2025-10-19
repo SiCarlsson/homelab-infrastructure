@@ -1,0 +1,43 @@
+---
+- name: Setup pgAdmin for PostgreSQL Management
+  hosts: local_docker_hosts
+  become: yes
+  gather_facts: yes
+
+  roles:
+    - role: ../roles/pgadmin
+
+  post_tasks:
+    - name: Check pgAdmin container status
+      command: docker compose ps --services --filter status=running
+      args:
+        chdir: /opt/pgadmin
+      register: pgadmin_running_services
+      changed_when: false
+
+    - name: Verify pgAdmin container is running
+      assert:
+        that:
+          - pgadmin_running_services.stdout_lines | length > 0
+        fail_msg: "pgAdmin container is not running"
+        success_msg: "pgAdmin container is running successfully"
+
+    - name: Display setup completion
+      debug:
+        msg:
+          - "🎉 pgAdmin setup completed successfully!"
+          - "🌐 Access pgAdmin at: https://{{ pgadmin_domain }}"
+          - "📧 Login email: {{ pgadmin_email }}"
+          - ""
+          - "📊 Pre-configured PostgreSQL server:"
+          - "  Name: Homelab PostgreSQL"
+          - "  Host: {{ postgresql_host_ip }}"
+          - "  Port: {{ postgresql_port }}"
+          - ""
+          - "🔑 You'll need to enter the PostgreSQL password when connecting"
+          - ""
+          - "📝 Useful features:"
+          - "  ✅ Query Tool - Write and execute SQL"
+          - "  ✅ Database Browser - Explore tables and schemas"
+          - "  ✅ Backup/Restore - Manage database backups"
+          - "  ✅ User Management - Create and manage users"

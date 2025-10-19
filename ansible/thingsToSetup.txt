@@ -9,3 +9,5 @@ Nginx (webserver)
 n8n
 Authentik
 Streamlit
+Jellyfin
+arr-suite

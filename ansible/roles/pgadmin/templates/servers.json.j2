@@ -1,0 +1,14 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "Homelab PostgreSQL",
+      "Group": "Servers",
+      "Host": "{{ postgresql_host_ip }}",
+      "Port": {{ postgresql_port }},
+      "MaintenanceDB": "{{ postgresql_maintenance_db }}",
+      "Username": "{{ postgresql_username }}",
+      "SSLMode": "prefer",
+      "Comment": "Main PostgreSQL database server"
+    }
+  }
+}
