@@ -1,0 +1,5 @@
+---
+- name: restart postgresql
+  shell: |
+    cd /opt/postgresql
+    docker compose restart

@@ -1,0 +1,30 @@
+services:
+  postgresql:
+    image: postgres:{{ postgresql_version }}
+    container_name: postgresql
+    restart: unless-stopped
+    ports:
+      - "{{ postgresql_port }}:5432"
+    environment:
+      - POSTGRES_PASSWORD={{ postgresql_superuser_password }}
+      - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --lc-collate=C --lc-ctype=C
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - {{ postgresql_data_dir }}:/var/lib/postgresql/data
+      - {{ postgresql_init_dir }}:/docker-entrypoint-initdb.d:ro
+{% if postgresql_enable_backups %}
+      - {{ postgresql_backup_dir }}:/backups
+{% endif %}
+    command:
+      - postgres
+      - -c
+      - shared_buffers={{ postgresql_shared_buffers }}
+      - -c
+      - max_connections={{ postgresql_max_connections }}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U {{ postgresql_superuser }}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    security_opt:
+      - no-new-privileges:true

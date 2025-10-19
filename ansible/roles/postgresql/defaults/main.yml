@@ -1,0 +1,28 @@
+---
+# PostgreSQL configuration
+postgresql_version: "16-alpine"
+
+# Directories
+postgresql_data_dir: "/opt/postgresql/data"
+postgresql_init_dir: "/opt/postgresql/init"
+
+# Database credentials
+postgresql_superuser: "postgres"
+postgresql_superuser_password: "{{ lookup('env', 'POSTGRES_PASSWORD') | default('changeme123') }}"
+
+# Default database and user
+postgresql_default_db: "{{ lookup('env', 'POSTGRES_DB') | default('homelab') }}"
+postgresql_default_user: "{{ lookup('env', 'POSTGRES_USER') | default('homelab') }}"
+postgresql_default_password: "{{ lookup('env', 'POSTGRES_USER_PASSWORD') | default('homelab123') }}"
+
+# Port configuration
+postgresql_port: "5432"
+
+# Resource limits
+postgresql_shared_buffers: "256MB"
+postgresql_max_connections: "100"
+
+# Backup settings
+postgresql_enable_backups: false
+postgresql_backup_dir: "/opt/postgresql/backups"
+postgresql_backup_retention_days: "7"

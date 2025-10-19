@@ -29,6 +29,7 @@ quick-ansible:
 	$(MAKE) ansible-install-homepage
 	$(MAKE) ansible-install-changedetection
 	$(MAKE) ansible-install-portainer
+	$(MAKE) ansible-install-postgresql
 
 quick-up-all:
 	$(MAKE) quick-terraform
@@ -113,3 +114,9 @@ ansible-install-changedetection:
 
 ansible-install-portainer:
 	ansible-playbook -i ansible/inventory/hosts.yml ansible/playbooks/portainer-setup.yml
+
+ansible-install-postgresql:
+	ansible-playbook -i ansible/inventory/hosts.yml ansible/playbooks/postgresql-setup.yml \
+		$(if $(POSTGRES_PASSWORD),-e postgresql_superuser_password="$(POSTGRES_PASSWORD)",) \
+		$(if $(POSTGRES_USER_PASSWORD),-e postgresql_default_password="$(POSTGRES_USER_PASSWORD)",)
+

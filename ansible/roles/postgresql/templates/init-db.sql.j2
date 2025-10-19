@@ -1,0 +1,31 @@
+-- PostgreSQL initialization script
+-- This script runs only on first database creation
+
+-- Create default database if different from postgres
+{% if postgresql_default_db != 'postgres' %}
+CREATE DATABASE {{ postgresql_default_db }};
+{% endif %}
+
+-- Create default user if different from superuser
+{% if postgresql_default_user != postgresql_superuser %}
+CREATE USER {{ postgresql_default_user }} WITH PASSWORD '{{ postgresql_default_password }}';
+{% endif %}
+
+-- Grant privileges
+{% if postgresql_default_db != 'postgres' and postgresql_default_user != postgresql_superuser %}
+GRANT ALL PRIVILEGES ON DATABASE {{ postgresql_default_db }} TO {{ postgresql_default_user }};
+\c {{ postgresql_default_db }}
+GRANT ALL PRIVILEGES ON SCHEMA public TO {{ postgresql_default_user }};
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO {{ postgresql_default_user }};
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO {{ postgresql_default_user }};
+{% endif %}
+
+-- Enable useful extensions
+{% if postgresql_default_db != 'postgres' %}
+\c {{ postgresql_default_db }}
+{% endif %}
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE EXTENSION IF NOT EXISTS "pg_trgm";
+
+-- You can add more initialization SQL here
+-- For example, creating tables, functions, etc.

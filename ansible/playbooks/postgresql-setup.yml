@@ -1,0 +1,49 @@
+---
+- name: Setup PostgreSQL Database Server
+  hosts: local_docker_hosts
+  become: yes
+  gather_facts: yes
+
+  roles:
+    - role: ../roles/postgresql
+
+  post_tasks:
+    - name: Check PostgreSQL container status
+      command: docker compose ps --services --filter status=running
+      args:
+        chdir: /opt/postgresql
+      register: postgresql_running_services
+      changed_when: false
+
+    - name: Verify PostgreSQL container is running
+      assert:
+        that:
+          - postgresql_running_services.stdout_lines | length > 0
+        fail_msg: "PostgreSQL container is not running"
+        success_msg: "PostgreSQL container is running successfully"
+
+    - name: Test PostgreSQL connection
+      shell: |
+        docker exec postgresql psql -U {{ postgresql_superuser }} -d {{ postgresql_default_db }} -c "SELECT version();"
+      register: pg_version
+      changed_when: false
+
+    - name: Display setup completion
+      debug:
+        msg:
+          - "🎉 PostgreSQL setup completed successfully!"
+          - "🗄️  PostgreSQL version: {{ pg_version.stdout_lines[2] | default('PostgreSQL') }}"
+          - ""
+          - "📊 Connection Information:"
+          - "  Host: {{ ansible_host }}"
+          - "  Port: {{ postgresql_port }}"
+          - "  Database: {{ postgresql_default_db }}"
+          - "  User: {{ postgresql_default_user }}"
+          - ""
+          - "🔗 Connection string:"
+          - "  postgresql://{{ postgresql_default_user }}:PASSWORD@{{ ansible_host }}:{{ postgresql_port }}/{{ postgresql_default_db }}"
+          - ""
+          - "📝 Useful commands:"
+          - "  Connect: docker exec -it postgresql psql -U {{ postgresql_superuser }} -d {{ postgresql_default_db }}"
+          - "  Backup: docker exec postgresql pg_dump -U {{ postgresql_superuser }} {{ postgresql_default_db }} > backup.sql"
+          - "  Logs: docker logs postgresql"

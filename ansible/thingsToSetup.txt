@@ -5,7 +5,6 @@ Grafana + Prometheus
 Loki?
 Gitea/Gitlab/Jenkins
 Nextcloud?
-PostgreSQL servers
 Nginx (webserver)
 n8n
 Authentik
