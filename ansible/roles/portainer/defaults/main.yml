@@ -9,9 +9,4 @@ portainer_data_dir: "/opt/portainer/data"
 portainer_domain: "portainer.{{ lookup('env', 'HOMELAB_DOMAIN') | default('example.com') }}"
 
 # Traefik integration
-portainer_enable_traefik: true
 portainer_traefik_network: "traefik"
-
-# Port (only used if not using Traefik)
-portainer_port: "9000"
-portainer_edge_port: "8000"

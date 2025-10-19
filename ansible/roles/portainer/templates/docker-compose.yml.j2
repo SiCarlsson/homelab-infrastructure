@@ -3,17 +3,11 @@ services:
     image: portainer/portainer-ce:{{ portainer_version }}
     container_name: portainer
     restart: unless-stopped
-{% if not portainer_enable_traefik %}
-    ports:
-      - "{{ portainer_port }}:9000"     # Web UI
-      - "{{ portainer_edge_port }}:8000"  # Edge Agent
-{% endif %}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - {{ portainer_data_dir }}:/data
     security_opt:
       - no-new-privileges:true
-{% if portainer_enable_traefik %}
     labels:
       - "traefik.enable=true"
       
@@ -36,4 +30,3 @@ services:
 networks:
   {{ portainer_traefik_network }}:
     external: true
-{% endif %}

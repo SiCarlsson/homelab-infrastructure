@@ -45,7 +45,7 @@
 
 - name: Display Portainer access information
   debug:
-    msg: 
+    msg:
       - "Portainer is now running!"
       - "Access it at: https://{{ portainer_domain }}"
       - "On first login, you'll need to create an admin user"
