@@ -31,6 +31,7 @@ quick-ansible:
 	$(MAKE) ansible-install-portainer
 	$(MAKE) ansible-install-postgresql
 	$(MAKE) ansible-install-pgadmin
+	$(MAKE) ansible-install-uptimekuma
 
 quick-up-all:
 	$(MAKE) quick-terraform
@@ -126,4 +127,7 @@ ansible-install-pgadmin:
 		$(if $(PGADMIN_EMAIL),-e pgadmin_email="$(PGADMIN_EMAIL)",) \
 		$(if $(PGADMIN_PASSWORD),-e pgadmin_password="$(PGADMIN_PASSWORD)",) \
 		$(if $(POSTGRES_HOST),-e postgresql_host="$(POSTGRES_HOST)",)
+
+ansible-install-uptimekuma:
+	ansible-playbook -i ansible/inventory/hosts.yml ansible/playbooks/uptime-kuma-setup.yml
 

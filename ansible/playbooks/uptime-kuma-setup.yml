@@ -1,0 +1,46 @@
+---
+- name: Setup Uptime Kuma for Service Monitoring
+  hosts: local_docker_hosts
+  become: yes
+  gather_facts: yes
+
+  roles:
+    - role: ../roles/uptime-kuma
+
+  post_tasks:
+    - name: Check Uptime Kuma container status
+      command: docker compose ps --services --filter status=running
+      args:
+        chdir: /opt/uptime-kuma
+      register: uptimekuma_running_services
+      changed_when: false
+
+    - name: Verify Uptime Kuma container is running
+      assert:
+        that:
+          - uptimekuma_running_services.stdout_lines | length > 0
+        fail_msg: "Uptime Kuma container is not running"
+        success_msg: "Uptime Kuma container is running successfully"
+
+    - name: Display setup completion
+      debug:
+        msg:
+          - "🎉 Uptime Kuma setup completed successfully!"
+          - "🌐 Access Uptime Kuma at: https://{{ uptimekuma_domain }}"
+          - "👤 Create your admin account on first login"
+          - ""
+          - "📊 Suggested monitors to add:"
+          - "  • Homepage - https://homepage.{{ lookup('env', 'HOMELAB_DOMAIN') }}"
+          - "  • Traefik - https://traefik.{{ lookup('env', 'HOMELAB_DOMAIN') }}"
+          - "  • AdGuard - https://adguard.{{ lookup('env', 'HOMELAB_DOMAIN') }}"
+          - "  • Portainer - https://portainer.{{ lookup('env', 'HOMELAB_DOMAIN') }}"
+          - "  • pgAdmin - https://pgadmin.{{ lookup('env', 'HOMELAB_DOMAIN') }}"
+          - "  • ChangeDetection - https://change.{{ lookup('env', 'HOMELAB_DOMAIN') }}"
+          - ""
+          - "📝 Features:"
+          - "  ✅ HTTP/HTTPS monitoring"
+          - "  ✅ TCP port monitoring"
+          - "  ✅ Docker container monitoring"
+          - "  ✅ Multiple notification channels"
+          - "  ✅ Public status pages"
+          - "  ✅ Beautiful dashboards"

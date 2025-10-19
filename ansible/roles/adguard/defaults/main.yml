@@ -49,3 +49,5 @@ adguard_dns_records:
     ip: "192.168.10.20"
   - domain: "pgadmin.{{ lookup('env', 'HOMELAB_DOMAIN') | default('example.com') }}"
     ip: "192.168.10.20"
+  - domain: "uptime.{{ lookup('env', 'HOMELAB_DOMAIN') | default('example.com') }}"
+    ip: "192.168.10.20"

@@ -1,0 +1,58 @@
+---
+- name: Ensure Docker service is running
+  systemd:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: Create uptime-kuma directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: "0755"
+    owner: root
+    group: root
+  loop:
+    - "/opt/uptime-kuma"
+    - "{{ uptimekuma_data_dir }}"
+
+- name: Create uptime-kuma docker-compose file
+  template:
+    src: docker-compose.yml.j2
+    dest: /opt/uptime-kuma/docker-compose.yml
+    mode: "0644"
+  notify: restart uptime-kuma
+
+- name: Start uptime-kuma using docker compose
+  shell: |
+    cd /opt/uptime-kuma
+    docker compose up -d
+  register: compose_result
+  changed_when: "'Started' in compose_result.stderr or 'Creating' in compose_result.stderr"
+
+- name: Wait for Uptime Kuma to be ready
+  uri:
+    url: "https://{{ uptimekuma_domain }}"
+    method: GET
+    timeout: 10
+    validate_certs: no
+  register: uptimekuma_web_check
+  retries: 10
+  delay: 5
+  until: uptimekuma_web_check.status == 200
+  failed_when: false
+  changed_when: false
+
+- name: Display Uptime Kuma access information
+  debug:
+    msg:
+      - "Uptime Kuma is now running!"
+      - "Access it at: https://{{ uptimekuma_domain }}"
+      - ""
+      - "On first login, you'll need to create an admin account"
+      - ""
+      - "📝 Quick setup tips:"
+      - "  1. Create your admin account"
+      - "  2. Add monitors for your services"
+      - "  3. Set up notifications (email, Discord, Slack, etc.)"
+      - "  4. Create a status page (optional)"

@@ -1,0 +1,23 @@
+services:
+  uptime-kuma:
+    image: louislam/uptime-kuma:{{ uptimekuma_version }}
+    container_name: uptime-kuma
+    restart: unless-stopped
+    volumes:
+      - {{ uptimekuma_data_dir }}:/app/data
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.uptime-kuma.rule=Host(`{{ uptimekuma_domain }}`)"
+      - "traefik.http.routers.uptime-kuma.entrypoints=websecure"
+      - "traefik.http.routers.uptime-kuma.tls.certresolver=cloudflare"
+      - "traefik.http.routers.uptime-kuma.tls.domains[0].main=*.{{ lookup('env', 'HOMELAB_DOMAIN') | default('example.com') }}"
+      - "traefik.http.services.uptime-kuma.loadbalancer.server.port=3001"
+    networks:
+      - {{ uptimekuma_traefik_network }}
+
+networks:
+  {{ uptimekuma_traefik_network }}:
+    external: true

@@ -1,0 +1,10 @@
+---
+# Uptime Kuma configuration
+uptimekuma_version: "1"
+
+# Directories
+uptimekuma_data_dir: "/opt/uptime-kuma/data"
+
+# Domain configuration for Traefik integration
+uptimekuma_domain: "uptime.{{ lookup('env', 'HOMELAB_DOMAIN') | default('example.com') }}"
+uptimekuma_traefik_network: "traefik"
