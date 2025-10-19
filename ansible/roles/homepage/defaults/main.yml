@@ -52,21 +52,6 @@ homepage_widgets:
 homepage_services:
   - name: "Infrastructure"
     services:
-      - name: "Proxmox"
-        href: "https://proxmox.{{ default_domain }}"
-        icon: "proxmox"
-        description: "Virtualization Platform"
-        widget:
-          type: "proxmox"
-          url: "https://proxmox.{{ default_domain }}"
-      - name: "Traefik"
-        href: "https://traefik.{{ default_domain }}"
-        icon: "traefik"
-        description: "Reverse Proxy & SSL"
-        container: "traefik"
-        widget:
-          type: "traefik"
-          url: "https://traefik.{{ default_domain }}"
       - name: "AdGuard Home"
         href: "https://adguard.{{ default_domain }}"
         icon: "adguard-home"
@@ -77,14 +62,20 @@ homepage_services:
           url: "http://adguard-home:3000"
           username: "{{ lookup('env', 'ADGUARD_ADMIN_USER') | default('admin') }}"
           password: "{{ lookup('env', 'ADGUARD_ADMIN_PASSWORD') | default('') }}"
+      - name: "Traefik"
+        href: "https://traefik.{{ default_domain }}"
+        icon: "traefik"
+        description: "Reverse Proxy & SSL"
+        container: "traefik"
       - name: "Portainer"
         href: "https://portainer.{{ default_domain }}"
         icon: "portainer"
         description: "Container Management"
         container: "portainer"
-        widget:
-          type: "portainer"
-          url: "https://portainer.{{ default_domain }}"
+      - name: "Proxmox"
+        href: "https://proxmox.{{ default_domain }}"
+        icon: "proxmox"
+        description: "Virtualization Platform"
 
   - name: "Monitoring"
     services:
