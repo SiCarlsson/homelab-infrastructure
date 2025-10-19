@@ -1,27 +1,12 @@
 Logseq
-
 bitWarden
-
-Portainer
-
 Uptime Kuma
-
 Grafana + Prometheus
-
 Loki?
-
 Gitea/Gitlab/Jenkins
-
 Nextcloud?
-
 PostgreSQL servers
-
-ChangeDetection
-
 Nginx (webserver)
-
 n8n
-
 Authentik
-
 Streamlit

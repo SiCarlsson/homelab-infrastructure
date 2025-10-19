@@ -1,0 +1,51 @@
+---
+- name: Ensure Docker service is running
+  systemd:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: Create portainer directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: "0755"
+    owner: root
+    group: root
+  loop:
+    - "/opt/portainer"
+    - "{{ portainer_data_dir }}"
+
+- name: Ensure traefik network exists
+  shell: docker network create traefik || true
+  when: portainer_enable_traefik
+
+- name: Create portainer docker-compose file
+  template:
+    src: docker-compose.yml.j2
+    dest: /opt/portainer/docker-compose.yml
+    mode: "0644"
+  notify: restart portainer
+
+- name: Start portainer using docker compose
+  shell: |
+    cd /opt/portainer
+    docker compose up -d
+  args:
+    creates: /opt/portainer/.started
+
+- name: Mark portainer as started
+  file:
+    path: /opt/portainer/.started
+    state: touch
+
+- name: Wait a moment for Portainer to start
+  pause:
+    seconds: 5
+
+- name: Display Portainer access information
+  debug:
+    msg: 
+      - "Portainer is now running!"
+      - "Access it at: https://{{ portainer_domain }}"
+      - "On first login, you'll need to create an admin user"

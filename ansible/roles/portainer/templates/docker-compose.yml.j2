@@ -1,0 +1,39 @@
+services:
+  portainer:
+    image: portainer/portainer-ce:{{ portainer_version }}
+    container_name: portainer
+    restart: unless-stopped
+{% if not portainer_enable_traefik %}
+    ports:
+      - "{{ portainer_port }}:9000"     # Web UI
+      - "{{ portainer_edge_port }}:8000"  # Edge Agent
+{% endif %}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - {{ portainer_data_dir }}:/data
+    security_opt:
+      - no-new-privileges:true
+{% if portainer_enable_traefik %}
+    labels:
+      - "traefik.enable=true"
+      
+      # HTTP Router for Portainer Web UI
+      - "traefik.http.routers.portainer.rule=Host(`{{ portainer_domain }}`)"
+      - "traefik.http.routers.portainer.entrypoints=websecure"
+      - "traefik.http.routers.portainer.tls.certresolver=cloudflare"
+      - "traefik.http.routers.portainer.service=portainer"
+      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+      
+      # Edge Agent
+      - "traefik.http.routers.portainer-edge.rule=Host(`{{ portainer_domain }}`) && PathPrefix(`/edge`)"
+      - "traefik.http.routers.portainer-edge.entrypoints=websecure"
+      - "traefik.http.routers.portainer-edge.tls.certresolver=cloudflare"
+      - "traefik.http.routers.portainer-edge.service=portainer-edge"
+      - "traefik.http.services.portainer-edge.loadbalancer.server.port=8000"
+    networks:
+      - {{ portainer_traefik_network }}
+
+networks:
+  {{ portainer_traefik_network }}:
+    external: true
+{% endif %}

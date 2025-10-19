@@ -1,0 +1,35 @@
+---
+- name: Setup Portainer for Docker Management
+  hosts: local_docker_hosts
+  become: yes
+  gather_facts: yes
+
+  roles:
+    - role: ../roles/portainer
+
+  post_tasks:
+    - name: Check Portainer container status
+      command: docker compose ps --services --filter status=running
+      args:
+        chdir: /opt/portainer
+      register: portainer_running_services
+      changed_when: false
+
+    - name: Verify Portainer container is running
+      assert:
+        that:
+          - portainer_running_services.stdout_lines | length > 0
+        fail_msg: "Portainer container is not running"
+        success_msg: "Portainer container is running successfully"
+
+    - name: Display setup completion
+      debug:
+        msg:
+          - "🎉 Portainer setup completed successfully!"
+          - "🐳 Access Portainer at: https://{{ portainer_domain }}"
+          - "👤 Create your admin account on first login"
+          - ""
+          - "📝 Features enabled:"
+          - "  ✅ Docker container management"
+          - "  ✅ Traefik integration with SSL"
+          - "  ✅ Edge agent support"

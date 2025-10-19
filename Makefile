@@ -28,6 +28,7 @@ quick-ansible:
 	$(MAKE) ansible-install-adguard
 	$(MAKE) ansible-install-homepage
 	$(MAKE) ansible-install-changedetection
+	$(MAKE) ansible-install-portainer
 
 quick-up-all:
 	$(MAKE) quick-terraform
@@ -109,3 +110,6 @@ ansible-install-homepage:
 
 ansible-install-changedetection:
 	ansible-playbook -i ansible/inventory/hosts.yml ansible/playbooks/changedetection-setup.yml
+
+ansible-install-portainer:
+	ansible-playbook -i ansible/inventory/hosts.yml ansible/playbooks/portainer-setup.yml
