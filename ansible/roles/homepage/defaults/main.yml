@@ -32,12 +32,6 @@ homepage_layout:
   Monitoring:
     style: column
     columns: 1
-  Development:
-    style: column
-    columns: 1
-  Productivity:
-    style: column
-    columns: 1
   Utilities:
     style: column
     columns: 1
@@ -58,22 +52,13 @@ homepage_widgets:
 homepage_services:
   - name: "Infrastructure"
     services:
-      - name: "AdGuard Home"
-        href: "https://adguard.{{ default_domain }}"
-        icon: "adguard-home"
-        description: "DNS Ad Blocker"
-        container: "adguard-home"
+      - name: "Proxmox"
+        href: "https://proxmox.{{ default_domain }}"
+        icon: "proxmox"
+        description: "Virtualization Platform"
         widget:
-          type: "adguard"
-          url: "https://adguard.{{ default_domain }}"
-      - name: "Portainer"
-        href: "https://portainer.{{ default_domain }}"
-        icon: "portainer"
-        description: "Container Management"
-        container: "portainer"
-        widget:
-          type: "portainer"
-          url: "https://portainer.{{ default_domain }}"
+          type: "proxmox"
+          url: "https://proxmox.{{ default_domain }}"
       - name: "Traefik"
         href: "https://traefik.{{ default_domain }}"
         icon: "traefik"
@@ -82,39 +67,32 @@ homepage_services:
         widget:
           type: "traefik"
           url: "https://traefik.{{ default_domain }}"
+      - name: "AdGuard Home"
+        href: "https://adguard.{{ default_domain }}"
+        icon: "adguard-home"
+        description: "DNS Ad Blocker"
+        container: "adguard-home"
+        widget:
+          type: "adguard"
+          url: "http://adguard-home:3000"
+          username: "{{ lookup('env', 'ADGUARD_ADMIN_USER') | default('admin') }}"
+          password: "{{ lookup('env', 'ADGUARD_ADMIN_PASSWORD') | default('') }}"
+      - name: "Portainer"
+        href: "https://portainer.{{ default_domain }}"
+        icon: "portainer"
+        description: "Container Management"
+        container: "portainer"
+        widget:
+          type: "portainer"
+          url: "https://portainer.{{ default_domain }}"
 
   - name: "Monitoring"
     services:
-      - name: "Grafana"
-        href: "https://grafana.{{ default_domain }}"
-        icon: "grafana"
-        description: "Metrics Visualization"
-      - name: "Prometheus"
-        href: "https://prometheus.{{ default_domain }}"
-        icon: "prometheus"
-        description: "Metrics Collection"
       - name: "Uptime Kuma"
         href: "https://uptime.{{ default_domain }}"
         icon: "uptime-kuma"
         description: "Service Monitoring"
-
-  - name: "Development"
-    services:
-      - name: "n8n"
-        href: "https://n8n.{{ default_domain }}"
-        icon: "n8n"
-        description: "Workflow Automation"
-
-  - name: "Productivity"
-    services:
-      - name: "Bitwarden"
-        href: "https://vault.{{ default_domain }}"
-        icon: "bitwarden"
-        description: "Password Manager"
-      - name: "Logseq"
-        href: "https://notes.{{ default_domain }}"
-        icon: "logseq"
-        description: "Knowledge Management"
+        container: "uptime-kuma"
 
   - name: "Utilities"
     services:
@@ -122,38 +100,42 @@ homepage_services:
         href: "https://change.{{ default_domain }}"
         icon: "changedetection"
         description: "Website Change Monitoring"
-      - name: "Nginx"
-        href: "https://nginx.{{ default_domain }}"
-        icon: "nginx"
-        description: "Web Server"
-      - name: "PostgreSQL Admin"
+        container: "changedetection"
+      - name: "pgAdmin"
         href: "https://pgadmin.{{ default_domain }}"
         icon: "postgresql"
         description: "Database Administration"
+        container: "pgadmin"
 
 # Bookmarks configuration - quick links
 homepage_bookmarks:
-  - name: "Developer"
+  - name: "LLM Tools"
+    bookmarks:
+      - name: "ChatGPT"
+        abbr: "CG"
+        href: "https://chat.openai.com/"
+      - name: "Claude"
+        abbr: "CL"
+        href: "https://claude.ai/"
+  - name: "Social"
     bookmarks:
       - name: "Github"
         abbr: "GH"
-        href: "https://github.com/"
-      - name: "Stack Overflow"
-        abbr: "SO"
-        href: "https://stackoverflow.com/"
-  - name: "Social"
-    bookmarks:
+        href: "https://github.com/SiCarlsson"
+      - name: "LinkedIn"
+        abbr: "LI"
+        href: "https://www.linkedin.com/"
       - name: "Reddit"
         abbr: "RE"
         href: "https://reddit.com/"
-      - name: "Twitter"
-        abbr: "TW"
-        href: "https://twitter.com/"
   - name: "Entertainment"
     bookmarks:
       - name: "YouTube"
         abbr: "YT"
         href: "https://youtube.com/"
-      - name: "Netflix"
-        abbr: "NF"
-        href: "https://netflix.com/"
+      - name: "HBO Max"
+        abbr: "HBO"
+        href: "https://hbomax.com/"
+      - name: "OnHockey"
+        abbr: "ON"
+        href: "https://onhockey.tv/"
