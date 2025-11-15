@@ -11,9 +11,23 @@ It uses:
 ## Self-hosted services
 
 - **Cloudflare DDNS**
-  - Handles changes of my personal IP-address at home. Simplifies usage of VPNs and remote access to services.
+  - Updates Cloudflare to point to dynamic home IP-address.
 - **Traefik**
-  - Reverse proxy and load balancer that automatically routes traffic to services. Also provides a web dashboard for monitoring.
+  - Reverse proxy and load balancer.
+- **AdGuard Home**
+  - Network-wide ad and tracker blocking DNS server.
+- **Change Detection**
+  - Website change detection and monitoring service.
+- **Homepage**
+  - Dashboard for quick access to all self-hosted services.
+- **pgAdmin**
+  - Web-based administration tool for PostgreSQL databases.
+- **Portainer**
+  - Container management platform.
+- **PostgreSQL**
+  - Relational database system.
+- **Uptime Kuma**
+  - Uptime monitoring tool.
 
 ## Setup
 
@@ -66,7 +80,7 @@ Before running any commands, ensure you have the following tools installed on yo
    ```bash
    make quick-ansible
    ```
-   This will install Docker, Traefik reverse proxy, and Cloudflare DDNS service on all VMs.
+   This will install all services directly.
 
 > **Note:** If you prefer more granular control, see the individual commands in the [Available Commands](#available-commands) section below.
 
@@ -76,7 +90,7 @@ Before running any commands, ensure you have the following tools installed on yo
 
 - `make quick-init` - Run all initial setup steps (init-scripts, create-ssh-to-pve, create-cloudinit, terraform-init).
 - `make quick-terraform` - Generate configuration files and apply Terraform changes automatically.
-- `make quick-ansible` - Install all services (Docker, Traefik, Cloudflare DDNS) on all hosts.
+- `make quick-ansible` - Install all services on all hosts.
 - `make quick-up-all` - Complete setup from scratch (runs quick-init, quick-terraform, quick-ansible).
 
 ### Setup Commands
@@ -103,3 +117,10 @@ Before running any commands, ensure you have the following tools installed on yo
 - `make ansible-install-docker` - Install and configure Docker on all hosts using Ansible playbook.
 - `make ansible-install-traefik` - Install and configure Traefik reverse proxy on all hosts.
 - `make ansible-install-cloudflare-ddns` - Install and configure Cloudflare DDNS service on all hosts.
+- `make ansible-install-adguard` - Install and configure AdGuard Home DNS server on all hosts.
+- `make ansible-install-changedetection` - Install and configure Change Detection monitoring service on all hosts.
+- `make ansible-install-homepage` - Install and configure Homepage application dashboard on all hosts.
+- `make ansible-install-pgadmin` - Install and configure pgAdmin PostgreSQL management tool on all hosts.
+- `make ansible-install-portainer` - Install and configure Portainer container management platform on all hosts.
+- `make ansible-install-postgresql` - Install and configure PostgreSQL database server on all hosts.
+- `make ansible-install-uptime-kuma` - Install and configure Uptime Kuma monitoring tool on all hosts.

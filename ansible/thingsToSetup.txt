@@ -1,6 +1,5 @@
 Logseq
 bitWarden
-Uptime Kuma
 Grafana + Prometheus
 Loki?
 Gitea/Gitlab/Jenkins
