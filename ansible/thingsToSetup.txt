@@ -1,12 +1,9 @@
-Logseq
-bitWarden
-Grafana + Prometheus
-Loki?
+Prometheus -> Grafana (-> Loki)
 Gitea/Gitlab/Jenkins
-Nextcloud?
+Nextcloud ? (cloud drive)
 Nginx (webserver)
-n8n
-Authentik
-Streamlit
-Jellyfin
-arr-suite
+Logseq (journaling)
+n8n (automation [uptime kuma -> discord])
+Authentik (make all services use it as well)
+Jellyfin + arr-suite (media)
+Streamlit (personal testing)
