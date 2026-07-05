@@ -2,11 +2,11 @@
 
 This repository contains the **Infrastructure as Code (IaC)** setup for my personal homelab.
 
-It uses:
+## Tech Stack & Architecture
 
-- **Proxmox VE** for virtualization and container management.
-- **Ansible** for configuring and deploying services inside the VMs.
-- **Terraform** for provisioning virtual machines and networks on Proxmox.
+* **Virtualization:** [Proxmox VE](https://www.proxmox.com) – Hypervisor for compute, virtualization, and container management.
+* **Provisioning:** [Terraform](https://www.terraform.io) – Declarative provisioning of virtual machines, storage, and networking on Proxmox.
+* **Configuration:** [Ansible](https://www.ansible.com) – Automated configuration management and service deployment inside the provisioned VMs.
 
 ## Self-hosted services
 
